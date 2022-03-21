@@ -10,26 +10,26 @@ import com.jhyuk316.mapzip.model.MapzipEntity;
 @AllArgsConstructor
 @Data
 public class MapzipDTO {
-    private String id;
-    private String restName;
+    private int id;
+    private String restaurantname;
     private double latitude;
     private double longitude;
     private String address;
-    private float rete;
+    private float rating;
 
     public MapzipDTO(final MapzipEntity entity) {
         this.id = entity.getId();
-        this.restName = entity.getRestName();
+        this.restaurantname = entity.getRestaurantname();
         this.latitude = entity.getLatitude();
         this.longitude = entity.getLongitude();
         this.address = entity.getAddress();
-        this.rete = entity.getRete();
+        this.rating = entity.getRating();
     }
 
     public static MapzipEntity toEntity(final MapzipDTO dto) {
-        return MapzipEntity.builder().id(dto.getId()).restName(dto.getRestName())
+        return MapzipEntity.builder().id(dto.getId()).restaurantname(dto.getRestaurantname())
                 .latitude(dto.getLatitude()).longitude(dto.getLongitude()).address(dto.getAddress())
-                .rete(dto.getRete()).build();
+                .rating(dto.getRating()).build();
     }
 
 }

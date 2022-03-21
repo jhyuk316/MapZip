@@ -9,20 +9,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "Mapzip")
+@Table(name = "Restaurant")
 public class MapzipEntity {
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    private String id;
-    private String restName;
+    private int id;
+    private String restaurantname;
     private double latitude;
     private double longitude;
     private String address;
-    private float rete;
+    private float rating;
 }

@@ -8,6 +8,11 @@ import java.util.List;
 import com.jhyuk316.mapzip.model.MapzipEntity;
 
 @Repository
-public interface MapzipRepository extends JpaRepository<MapzipEntity, String> {
-    List<MapzipEntity> findByRestName(String restName);
+public interface MapzipRepository extends JpaRepository<MapzipEntity, Integer> {
+    List<MapzipEntity> findByRestaurantname(String restaurantName);
+
+    List<MapzipEntity> findByRestaurantnameContains(String restaurantName);
+
+    // List<MapzipEntity> findA
+
 }
