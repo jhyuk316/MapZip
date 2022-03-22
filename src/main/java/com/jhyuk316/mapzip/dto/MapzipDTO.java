@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.jhyuk316.mapzip.model.MapzipEntity;
+import com.jhyuk316.mapzip.model.RestaurantEntity;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,7 +17,7 @@ public class MapzipDTO {
     private String address;
     private float rating;
 
-    public MapzipDTO(final MapzipEntity entity) {
+    public MapzipDTO(final RestaurantEntity entity) {
         this.id = entity.getId();
         this.restaurantname = entity.getRestaurantname();
         this.latitude = entity.getLatitude();
@@ -26,8 +26,8 @@ public class MapzipDTO {
         this.rating = entity.getRating();
     }
 
-    public static MapzipEntity toEntity(final MapzipDTO dto) {
-        return MapzipEntity.builder().id(dto.getId()).restaurantname(dto.getRestaurantname())
+    public static RestaurantEntity toEntity(final MapzipDTO dto) {
+        return RestaurantEntity.builder().id(dto.getId()).restaurantname(dto.getRestaurantname())
                 .latitude(dto.getLatitude()).longitude(dto.getLongitude()).address(dto.getAddress())
                 .rating(dto.getRating()).build();
     }

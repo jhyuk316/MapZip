@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Data
 @Entity
 @Table(name = "Restaurant")
-public class MapzipEntity {
+public class RestaurantEntity {
     @Id
     private int id;
     private String restaurantname;

@@ -11,23 +11,31 @@ import com.jhyuk316.mapzip.persistence.*;
 @Service
 public class MapzipService {
     @Autowired
-    private MapzipRepository repository;
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private YoutuberRepository youtuberRepository;
 
     public String testService() {
-        MapzipEntity entity = MapzipEntity.builder().restaurantname("first rest name").build();
+        RestaurantEntity entity =
+                RestaurantEntity.builder().restaurantname("first rest name").build();
 
-        repository.save(entity);
+        restaurantRepository.save(entity);
 
-        MapzipEntity savedEntity = repository.findById(entity.getId()).get();
+        RestaurantEntity savedEntity = restaurantRepository.findById(entity.getId()).get();
 
         return savedEntity.getRestaurantname();
     }
 
-    public List<MapzipEntity> getListRestaurant(final String restaurantName) {
-        return repository.findByRestaurantnameContains(restaurantName);
+    public List<RestaurantEntity> getListRestaurant(final String restaurantName) {
+        return restaurantRepository.findByRestaurantnameContains(restaurantName);
     }
 
-    public List<MapzipEntity> getAll() {
-        return repository.findAll();
+    public List<RestaurantEntity> getAllRestaurant() {
+        return restaurantRepository.findAll();
+    }
+
+    public List<YoutuberEntity> getAllYoutuber() {
+        return youtuberRepository.findAll();
     }
 }

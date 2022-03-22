@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.jhyuk316.mapzip.service.*;
 import com.jhyuk316.mapzip.dto.*;
-import com.jhyuk316.mapzip.model.MapzipEntity;
+import com.jhyuk316.mapzip.model.*;
 
 @Slf4j
 @RestController
@@ -32,10 +32,10 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/name")
+    @GetMapping("/findRestaurant")
     public ResponseEntity<?> getRestaurantList(@RequestParam(required = true) String name) {
         log.info(name);
-        List<MapzipEntity> entities = service.getListRestaurant(name);
+        List<RestaurantEntity> entities = service.getListRestaurant(name);
 
         List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
 
@@ -44,9 +44,9 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/all")
+    @GetMapping("/allRestaurant")
     public ResponseEntity<?> getAllRestaurant() {
-        List<MapzipEntity> entities = service.getAll();
+        List<RestaurantEntity> entities = service.getAllRestaurant();
 
         List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
 
@@ -55,16 +55,16 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/sample/korean")
-    @ResponseBody
-    public String korean() {
-        return "한글 잘 나오나 확인";
-    }
+    @GetMapping("/allYoutuber")
+    public ResponseEntity<?> getAllYoutuber() {
+        List<YoutuberEntity> entities = service.getAllYoutuber();
 
-    @GetMapping("/sample/korean/input")
-    @ResponseBody
-    public String koreanInput(String input) {
-        return input;
+        List<YoutuberDTO> dtos =
+                entities.stream().map(YoutuberDTO::new).collect(Collectors.toList());
+
+        ResponseDTO<YoutuberDTO> response = ResponseDTO.<YoutuberDTO>builder().data(dtos).build();
+
+        return ResponseEntity.ok().body(response);
     }
 
 
