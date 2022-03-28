@@ -10,7 +10,7 @@ import com.jhyuk316.mapzip.model.YoutuberEntity;
 @AllArgsConstructor
 @Data
 public class YoutuberDTO {
-    private int id;
+    private long id;
     private String name;
     private String url;
 

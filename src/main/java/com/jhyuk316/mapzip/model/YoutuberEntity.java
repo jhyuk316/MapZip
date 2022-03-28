@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "youtuber")
 public class YoutuberEntity {
     @Id
-    private int id;
+    private long id;
     private String name;
     private String url;
 }

@@ -10,7 +10,7 @@ import com.jhyuk316.mapzip.model.RestaurantEntity;
 @AllArgsConstructor
 @Data
 public class MapzipDTO {
-    private int id;
+    private long id;
     private String restaurantname;
     private double latitude;
     private double longitude;

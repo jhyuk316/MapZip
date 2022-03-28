@@ -22,7 +22,7 @@ public class MapzipService {
 
         restaurantRepository.save(entity);
 
-        RestaurantEntity savedEntity = restaurantRepository.findById(entity.getId()).get();
+        RestaurantEntity savedEntity = restaurantRepository.findById(entity.getId()).get(0);
 
         return savedEntity.getRestaurantname();
     }

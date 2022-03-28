@@ -32,6 +32,11 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
+    }
+
     @GetMapping("/findRestaurant")
     public ResponseEntity<?> getRestaurantList(@RequestParam(required = true) String name) {
         log.info(name);

@@ -19,10 +19,13 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "Restaurant")
 public class RestaurantEntity {
     @Id
-    private int id;
+    private long id;
     private String restaurantname;
     private double latitude;
     private double longitude;
     private String address;
     private float rating;
+
+
+
 }

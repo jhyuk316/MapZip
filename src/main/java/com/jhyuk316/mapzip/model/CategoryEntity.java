@@ -16,6 +16,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "category")
 public class CategoryEntity {
     @Id
-    private int id;
+    private long id;
     private String type;
 }
