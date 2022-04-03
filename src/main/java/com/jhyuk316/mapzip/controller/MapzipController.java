@@ -17,8 +17,14 @@ import com.jhyuk316.mapzip.model.*;
 @RestController
 @RequestMapping("mapzip")
 public class MapzipController {
+
     @Autowired
     private MapzipService service;
+
+//    @Autowired
+//    public MapzipController(MapzipService service){
+//        this.service = service;
+//    }
 
     @GetMapping("/test")
     public ResponseEntity<?> testMapzip() {
@@ -65,13 +71,24 @@ public class MapzipController {
         List<YoutuberEntity> entities = service.getAllYoutuber();
 
         List<YoutuberDTO> dtos =
-                entities.stream().map(YoutuberDTO::new).collect(Collectors.toList());
+            entities.stream().map(YoutuberDTO::new).collect(Collectors.toList());
 
         ResponseDTO<YoutuberDTO> response = ResponseDTO.<YoutuberDTO>builder().data(dtos).build();
 
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/addRestaurant")
+    public MapzipDTO addRestarurant(@RequestParam("name") String name, @RequestParam("address") String address){
+
+        return MapzipDTO.builder().restaurantname(name).address(address).build();
+    }
+
+    @GetMapping("/addRest")
+    public MapzipDTO addRest(){
+
+        return MapzipDTO.builder().build();
+    }
 
 
 }

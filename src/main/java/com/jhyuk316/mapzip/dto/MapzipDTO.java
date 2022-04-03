@@ -1,11 +1,13 @@
 package com.jhyuk316.mapzip.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
