@@ -55,6 +55,18 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
+    @GetMapping("/nearbyRestaurants")
+    public ResponseEntity<?> nearbyRestaurants(@RequestParam(required = true) double latitude,
+        @RequestParam(required = true) double longitude) {
+        List<RestaurantEntity> entities = service.nearbyRestaurants(latitude,longitude);
+
+        List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
+
+        ResponseDTO<MapzipDTO> response = ResponseDTO.<MapzipDTO>builder().data(dtos).build();
+
+        return ResponseEntity.ok().body(response);
+    }
+
     @GetMapping("/allRestaurant")
     public ResponseEntity<?> getAllRestaurant() {
         List<RestaurantEntity> entities = service.getAllRestaurant();
@@ -79,13 +91,16 @@ public class MapzipController {
     }
 
     @GetMapping("/addRestaurant")
-    public MapzipDTO addRestarurant(@RequestParam("name") String name, @RequestParam("address") String address){
+    public MapzipDTO addRestarurant(@RequestParam("name") String name,
+        @RequestParam("address") String address) {
+        double latitude;
+        double longitude;
 
         return MapzipDTO.builder().restaurantname(name).address(address).build();
     }
 
     @GetMapping("/addRest")
-    public MapzipDTO addRest(){
+    public MapzipDTO addRest() {
 
         return MapzipDTO.builder().build();
     }

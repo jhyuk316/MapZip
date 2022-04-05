@@ -40,7 +40,7 @@ dependencies {
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-//	implementation 'com.googlecode.libphonenumber:geocoder:2.181'
+	implementation 'com.googlecode.libphonenumber:geocoder:2.181'
 
 	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'

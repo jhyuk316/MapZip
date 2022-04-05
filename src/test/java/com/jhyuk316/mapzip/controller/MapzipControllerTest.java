@@ -42,7 +42,6 @@ public class MapzipControllerTest {
 
         mvc.perform(get("/mapzip/hello")).andExpect(status().isOk())
             .andExpect(content().string(hello));
-
     }
 
 
@@ -60,6 +59,12 @@ public class MapzipControllerTest {
         mvc.perform(get("/mapzip/addRestaurant").param("name", name).param("address", address))
             .andExpect(status().isOk()).andExpect(jsonPath("$.restaurantname", is(name)))
             .andExpect(jsonPath("$.address", is(address)));
+
+    }
+
+    @Test
+    @DisplayName("근처 식당 목록")
+    void nearbyRestaurants() {
 
     }
 }

@@ -15,8 +15,8 @@ public class SwaggerConfig {
     @Bean
     public Docket api(){
         return new Docket(DocumentationType.OAS_30)
-//            .apiInfo(apiInfo())
-//            .useDefaultResponseMessages(false)
+            .apiInfo(apiInfo())
+            .useDefaultResponseMessages(false)
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.jhyuk316.mapzip.controller"))
             .paths(PathSelectors.any())
