@@ -14,4 +14,10 @@ import java.util.List;
 public class ResponseDTO<T> {
     private String error;
     private List<T> data;
+    private int size;
+    private int current_page;
+    private int last_page;
+    private int from;
+    private int to;
+    private long total;
 }

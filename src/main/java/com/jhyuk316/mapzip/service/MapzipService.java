@@ -2,6 +2,8 @@ package com.jhyuk316.mapzip.service;
 
 import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import java.util.List;
@@ -36,6 +38,10 @@ public class MapzipService {
 
     public List<RestaurantEntity> getAllRestaurant() {
         return restaurantRepository.findAll();
+    }
+
+    public Page<RestaurantEntity> getAllRestaurant(Pageable pageable) {
+        return restaurantRepository.findAll(pageable);
     }
 
     public List<YoutuberEntity> getAllYoutuber() {

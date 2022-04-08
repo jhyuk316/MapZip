@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +61,7 @@ public class MapzipController {
     @GetMapping("/nearbyRestaurants")
     public ResponseEntity<?> nearbyRestaurants(@RequestParam(required = true) double latitude,
         @RequestParam(required = true) double longitude) {
-        List<RestaurantEntity> entities = service.nearbyRestaurants(latitude,longitude);
+        List<RestaurantEntity> entities = service.nearbyRestaurants(latitude, longitude);
 
         List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
 
@@ -67,13 +70,19 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/allRestaurant")
-    public ResponseEntity<?> getAllRestaurant() {
-        List<RestaurantEntity> entities = service.getAllRestaurant();
+    @GetMapping("/allRestaurants")
+    public ResponseEntity<?> getAllRestaurants(@PageableDefault(size = 3) Pageable pageable) {
+        Page<RestaurantEntity> entities = service.getAllRestaurant(pageable);
 
         List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
 
-        ResponseDTO<MapzipDTO> response = ResponseDTO.<MapzipDTO>builder().data(dtos).build();
+        ResponseDTO<MapzipDTO> response = ResponseDTO.<MapzipDTO>builder()
+            .data(dtos)
+            .size(pageable.getPageSize())
+            .current_page(pageable.getPageNumber())
+            .last_page(entities.getTotalPages() - 1)
+            .total(entities.getTotalElements())
+            .build();
 
         return ResponseEntity.ok().body(response);
     }
