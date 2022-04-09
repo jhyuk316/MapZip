@@ -1,5 +1,6 @@
 package com.jhyuk316.mapzip.service;
 
+import com.jhyuk316.mapzip.dto.MapzipDTO;
 import java.util.Comparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,28 @@ public class MapzipService {
         RestaurantEntity savedEntity = restaurantRepository.findById(entity.getId()).get(0);
 
         return savedEntity.getRestaurantname();
+    }
+
+    public List<RestaurantEntity> save(MapzipDTO mapzipDTO){
+        if (mapzipDTO == null){
+            log.warn("Dto cannot be null");
+            throw new RuntimeException("Dto cannot be null");
+        }
+
+        RestaurantEntity restaurantEntity = mapzipDTO.toEntity();
+        if(restaurantEntity.getRestaurantname() == null || restaurantEntity.getAddress() == null){
+            log.warn("Invaild Restaturant data");
+            throw new RuntimeException("Invaild Restaturant data");
+        }
+        restaurantEntity.setId(0);
+
+        log.info("Entity id : {}, name : {} is tried to save",restaurantEntity.getId(),restaurantEntity.getRestaurantname());
+
+        restaurantRepository.save(restaurantEntity);
+
+        log.info("Entity id : {}, name : {} is saved",restaurantEntity.getId(),restaurantEntity.getRestaurantname());
+
+        return restaurantRepository.findById(restaurantEntity.getId());
     }
 
     public List<RestaurantEntity> getListRestaurant(final String restaurantName) {

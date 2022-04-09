@@ -34,4 +34,10 @@ public class MapzipDTO {
                 .rating(dto.getRating()).build();
     }
 
+    public RestaurantEntity toEntity() {
+        return RestaurantEntity.builder().id(id).restaurantname(restaurantname)
+                .latitude(latitude).longitude(longitude).address(address)
+                .rating(rating).build();
+    }
+
 }

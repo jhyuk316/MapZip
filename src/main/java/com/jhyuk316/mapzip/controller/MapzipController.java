@@ -1,5 +1,6 @@
 package com.jhyuk316.mapzip.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import java.security.Provider.Service;
 import java.util.ArrayList;
@@ -17,12 +18,13 @@ import com.jhyuk316.mapzip.dto.*;
 import com.jhyuk316.mapzip.model.*;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("mapzip")
 public class MapzipController {
 
-    @Autowired
-    private MapzipService service;
+//    @Autowired
+    private final MapzipService service;
 
 //    @Autowired
 //    public MapzipController(MapzipService service){
@@ -99,13 +101,16 @@ public class MapzipController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/addRestaurant")
-    public MapzipDTO addRestarurant(@RequestParam("name") String name,
-        @RequestParam("address") String address) {
-        double latitude;
-        double longitude;
+    @PostMapping("/addRestaurant")
+    public ResponseEntity<?> addRestarurant(@RequestBody MapzipDTO mapzipDTO) {
 
-        return MapzipDTO.builder().restaurantname(name).address(address).build();
+        List<RestaurantEntity> entities = service.save(mapzipDTO);
+
+        List<MapzipDTO> dtos = entities.stream().map(MapzipDTO::new).collect(Collectors.toList());
+
+        ResponseDTO<MapzipDTO> response = ResponseDTO.<MapzipDTO>builder().data(dtos).build();
+
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/addRest")
