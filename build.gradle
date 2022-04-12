@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.6.4'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
 }
 
 group = 'com.jhyuk316'
@@ -9,44 +9,44 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
-	maven { url 'https://repo.spring.io/milestone' }
-	maven { url 'https://repo.spring.io/snapshot' }
-	jcenter()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+    jcenter()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	
-	// compileOnly 'org.projectlombok:lombok'
-	// annotationProcessor 'org.projectlombok:lombok'
-	// lombok
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // compileOnly 'org.projectlombok:lombok'
+    // annotationProcessor 'org.projectlombok:lombok'
+    // lombok
     implementation('org.projectlombok:lombok')
     annotationProcessor('org.projectlombok:lombok')
     testImplementation('org.projectlombok:lombok')
     testAnnotationProcessor('org.projectlombok:lombok')
-	
 
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.3'
-	 runtimeOnly 'com.h2database:h2'
-	
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation 'com.googlecode.libphonenumber:geocoder:2.181'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.0.3'
+//	runtimeOnly 'com.h2database:h2'
 
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation 'com.googlecode.libphonenumber:geocoder:2.181'
+
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

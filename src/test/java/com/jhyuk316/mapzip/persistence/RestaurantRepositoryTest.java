@@ -2,10 +2,8 @@ package com.jhyuk316.mapzip.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.jhyuk316.mapzip.dto.MapzipDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import java.util.List;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

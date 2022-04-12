@@ -1,24 +1,21 @@
 package com.jhyuk316.mapzip.persistence;
 
+import com.jhyuk316.mapzip.model.RestaurantEntity;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-import com.jhyuk316.mapzip.model.RestaurantEntity;
-
 @Repository
-public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Integer> {
+public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Long> {
 
     List<RestaurantEntity> findById(long id);
 
-    List<RestaurantEntity> findByRestaurantname(String restaurantName);
+    List<RestaurantEntity> findByNameContains(String name);
 
-    List<RestaurantEntity> findByRestaurantnameContains(String restaurantName);
-
-    List<RestaurantEntity> findByLatitudeBetweenAndLongitudeBetween(double minLatitute, double maxLatitute,
+    List<RestaurantEntity> findByLatitudeBetweenAndLongitudeBetween(
+        double minLatitute, double maxLatitute,
         double minlongitude, double maxlongitude);
 
     Page<RestaurantEntity> findAll(Pageable pageable);

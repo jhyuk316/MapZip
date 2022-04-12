@@ -13,17 +13,18 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
 
     @Bean
-    public Docket api(){
+    public Docket api() {
         return new Docket(DocumentationType.OAS_30)
+            .enableUrlTemplating(false)
             .apiInfo(apiInfo())
-            .useDefaultResponseMessages(false)
+            .useDefaultResponseMessages(true)
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.jhyuk316.mapzip.controller"))
             .paths(PathSelectors.any())
             .build();
     }
 
-    private ApiInfo apiInfo(){
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
             .title("Mapzip API")
             .description("맵집 API")

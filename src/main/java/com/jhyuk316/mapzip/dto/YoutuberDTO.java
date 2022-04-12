@@ -1,11 +1,12 @@
 package com.jhyuk316.mapzip.dto;
 
+import com.jhyuk316.mapzip.model.YoutuberEntity;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import com.jhyuk316.mapzip.model.YoutuberEntity;
-
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -20,9 +21,12 @@ public class YoutuberDTO {
         this.url = entity.getUrl();
     }
 
-    public static YoutuberEntity toEntity(final YoutuberDTO dto) {
-        return YoutuberEntity.builder().id(dto.getId()).name(dto.getName()).url(dto.getUrl())
-                .build();
+    public YoutuberEntity toEntity() {
+        return YoutuberEntity.builder()
+            .id(id)
+            .name(name)
+            .url(url)
+            .build();
     }
 
 }

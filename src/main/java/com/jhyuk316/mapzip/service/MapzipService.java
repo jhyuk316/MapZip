@@ -1,16 +1,17 @@
 package com.jhyuk316.mapzip.service;
 
-import com.jhyuk316.mapzip.dto.MapzipDTO;
+import com.jhyuk316.mapzip.dto.RestaurantDTO;
+import com.jhyuk316.mapzip.model.RestaurantEntity;
+import com.jhyuk316.mapzip.model.YoutuberEntity;
+import com.jhyuk316.mapzip.persistence.RestaurantRepository;
+import com.jhyuk316.mapzip.persistence.YoutuberRepository;
 import java.util.Comparator;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
 import java.util.List;
-import com.jhyuk316.mapzip.model.*;
-import com.jhyuk316.mapzip.persistence.*;
-import org.springframework.web.bind.annotation.RequestParam;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
@@ -22,49 +23,42 @@ public class MapzipService {
     @Autowired
     private YoutuberRepository youtuberRepository;
 
-    public String testService() {
-        RestaurantEntity entity =
-            RestaurantEntity.builder().restaurantname("first rest name").build();
 
-        restaurantRepository.save(entity);
-
-        RestaurantEntity savedEntity = restaurantRepository.findById(entity.getId()).get(0);
-
-        return savedEntity.getRestaurantname();
-    }
-
-    public List<RestaurantEntity> save(MapzipDTO mapzipDTO){
-        if (mapzipDTO == null){
+    public List<RestaurantEntity> save(RestaurantDTO restaurantDTO) {
+        if (restaurantDTO == null) {
             log.warn("Dto cannot be null");
             throw new RuntimeException("Dto cannot be null");
         }
 
-        RestaurantEntity restaurantEntity = mapzipDTO.toEntity();
-        if(restaurantEntity.getRestaurantname() == null || restaurantEntity.getAddress() == null){
+        RestaurantEntity restaurantEntity = restaurantDTO.toEntity();
+        if (restaurantEntity.getName() == null || restaurantEntity.getAddress() == null) {
             log.warn("Invaild Restaturant data");
             throw new RuntimeException("Invaild Restaturant data");
         }
         restaurantEntity.setId(0);
 
-        log.info("Entity id : {}, name : {} is tried to save",restaurantEntity.getId(),restaurantEntity.getRestaurantname());
+        log.info("Entity id : {}, name : {} is tried to save", restaurantEntity.getId(),
+            restaurantEntity.getName());
 
         restaurantRepository.save(restaurantEntity);
 
-        log.info("Entity id : {}, name : {} is saved",restaurantEntity.getId(),restaurantEntity.getRestaurantname());
+        log.info("Entity id : {}, name : {} is saved", restaurantEntity.getId(),
+            restaurantEntity.getName());
 
         return restaurantRepository.findById(restaurantEntity.getId());
     }
 
-    public List<RestaurantEntity> getListRestaurant(final String restaurantName) {
-        return restaurantRepository.findByRestaurantnameContains(restaurantName);
+    public List<RestaurantEntity> findRestaurants(final String name) {
+        return restaurantRepository.findByNameContains(name);
     }
 
-    public List<RestaurantEntity> getAllRestaurant() {
-        return restaurantRepository.findAll();
-    }
-
-    public Page<RestaurantEntity> getAllRestaurant(Pageable pageable) {
+    public Page<RestaurantEntity> getRestaurants(Pageable pageable) {
         return restaurantRepository.findAll(pageable);
+    }
+
+    public RestaurantDTO getRestaurant(long id) {
+        RestaurantEntity entity = restaurantRepository.getById(id);
+        return new RestaurantDTO(entity);
     }
 
     public List<YoutuberEntity> getAllYoutuber() {
