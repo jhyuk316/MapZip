@@ -4,23 +4,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.TestPropertySource;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
+@Transactional
+//@TestPropertySource("spring.config.locations = classpath:application-test.yml")
+//@TestPropertySource("classpath:application-test.yml")
+@TestPropertySource(properties = {"spring.config.location = classpath:application-test.yml"}) // ok
 public class RestaurantRepositoryTest {
 
     @Autowired
     RestaurantRepository restaurantRepository;
 
     @AfterEach
-    public void cleanup(){
+    public void cleanup() {
         restaurantRepository.deleteAll();
     }
 
@@ -32,17 +35,17 @@ public class RestaurantRepositoryTest {
         double longitude = 126.952757;
 
         restaurantRepository.save(RestaurantEntity.builder()
-                .restaurantname(name)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build());
+            .name(name)
+            .latitude(latitude)
+            .longitude(longitude)
+            .build());
 
         //when
         List<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll();
 
         //then
         RestaurantEntity restaurantEntity = restaurantEntityList.get(0);
-        assertThat(restaurantEntity.getRestaurantname()).isEqualTo(name);
+        assertThat(restaurantEntity.getName()).isEqualTo(name);
         assertThat(restaurantEntity.getLatitude()).isEqualTo(latitude);
         assertThat(restaurantEntity.getLongitude()).isEqualTo(longitude);
     }

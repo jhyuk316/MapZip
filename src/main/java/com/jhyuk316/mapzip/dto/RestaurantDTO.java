@@ -11,34 +11,33 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class RestaurantDTO {
+
     private long id;
     private String name;
     private double latitude;
-    private double longtitude;
+    private double longitude;
     private String address;
     private float rating;
 
-    public RestaurantDTO(final RestaurantEntity entity){
+    public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();
         name = entity.getName();
         latitude = entity.getLatitude();
-        longtitude = entity.getLongitude();
+        longitude = entity.getLongitude();
         address = entity.getAddress();
         rating = entity.getRating();
     }
 
-    public RestaurantEntity toEntity(){
+    public RestaurantEntity toEntity() {
         return RestaurantEntity.builder()
             .id(id)
             .name(name)
             .latitude(latitude)
-            .longitude(longtitude)
+            .longitude(longitude)
             .address(address)
             .rating(rating)
             .build();
     }
-
-
 
 
 }

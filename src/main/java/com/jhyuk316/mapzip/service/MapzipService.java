@@ -1,5 +1,6 @@
 package com.jhyuk316.mapzip.service;
 
+import com.jhyuk316.mapzip.dto.MemberDTO;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
@@ -81,5 +82,10 @@ public class MapzipService {
 //                Math.abs(o2.getLatitude() - latitude) + Math.abs(o2.getLongitude() - longitude))));
 
         return restList;
+    }
+
+    public MemberDTO createMember(MemberDTO memberDTO) {
+
+        return null;
     }
 }
