@@ -8,7 +8,7 @@ import java.util.List;
 import com.jhyuk316.mapzip.model.CategoryEntity;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
-    List<CategoryEntity> findByType(String type);
+public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+    List<CategoryEntity> findByName(String name);
 
 }

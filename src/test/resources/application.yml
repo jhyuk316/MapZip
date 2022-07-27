@@ -1,15 +1,5 @@
-# Datasource mariadb 설정
 spring:
-#  datasource:
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    url: jdbc:mariadb://localhost:3306/Mapzip
-#    username: root
-#    password: 1234
-
-#H2 console
-
 # Datasource H2 설정
-#spring:
   h2:
     console:
       enabled: true

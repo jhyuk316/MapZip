@@ -1,31 +1,25 @@
 package com.jhyuk316.mapzip.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import javax.persistence.*;
 
-@Builder
+import lombok.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Table(name = "restaurant_category")
 public class RestaurantCategoryEntity {
     @Id
+    @GeneratedValue
+    @Column(name = "restaurant_category_id")
     private long id;
 
-    // @ManyToOne
-    // @JoinColumn(name = "id")
-    // private RestaurantEntity restaurant;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "restaurant_id")
+    private RestaurantEntity restaurant;
 
-    // @ManyToOne
-    // @JoinColumn(name = "id")
-    // private CategoryEntity category;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
 }

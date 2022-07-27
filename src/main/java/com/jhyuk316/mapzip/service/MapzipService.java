@@ -35,7 +35,6 @@ public class MapzipService {
             log.warn("Invaild Restaturant data");
             throw new RuntimeException("Invaild Restaturant data");
         }
-        restaurantEntity.setId(0);
 
         log.info("Entity id : {}, name : {} is tried to save", restaurantEntity.getId(),
             restaurantEntity.getName());
