@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,7 +21,9 @@ public class RestaurantDTO {
     private String address;
     private float rating;
 
-    public RestaurantDTO(final RestaurantEntity entity){
+    private List<String> categories = new ArrayList<>();
+
+    public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();
         name = entity.getName();
         latitude = entity.getLatitude();
@@ -27,18 +32,16 @@ public class RestaurantDTO {
         rating = entity.getRating();
     }
 
-    public RestaurantEntity toEntity(){
+    public RestaurantEntity toEntity() {
         return RestaurantEntity.builder()
-            .id(id)
-            .name(name)
-            .latitude(latitude)
-            .longitude(longtitude)
-            .address(address)
-            .rating(rating)
-            .build();
+                .id(id)
+                .name(name)
+                .latitude(latitude)
+                .longitude(longtitude)
+                .address(address)
+                .rating(rating)
+                .build();
     }
-
-
 
 
 }

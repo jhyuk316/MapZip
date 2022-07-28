@@ -10,11 +10,12 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "Restaurant", indexes = @Index(name="i_location", columnList = "latitude, longitude"))
+// @Table(name = "Restaurant", indexes = @Index(name = "i_location", columnList = "latitude, longitude"))
+@Table(name = "restaurant")
 public class RestaurantEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="restaurant_id")
+    @Column(name = "restaurant_id")
     private long id;
 
     private String name;
@@ -42,9 +43,8 @@ public class RestaurantEntity {
         this.rating = rating;
     }
 
-    public void addCategory(String category){
-
-        RestaurantCategoryEntity restaurantCategory = new RestaurantCategoryEntity();
-        restaurantCategories.add(restaurantCategory);
+    public void addRestaurantCategory(RestaurantCategoryEntity restaurantCategory) {
+        this.restaurantCategories.add(restaurantCategory);
     }
+
 }

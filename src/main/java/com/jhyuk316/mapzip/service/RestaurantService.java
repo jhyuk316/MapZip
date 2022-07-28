@@ -5,23 +5,35 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jhyuk316.mapzip.ApiKey;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
+import com.jhyuk316.mapzip.model.CategoryEntity;
+import com.jhyuk316.mapzip.model.RestaurantCategoryEntity;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
+import com.jhyuk316.mapzip.persistence.CategoryRepository;
+import com.jhyuk316.mapzip.persistence.RestaurantCategoryRepository;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
+    private final CategoryRepository categoryRepository;
+    private final RestaurantCategoryRepository restaurantCategoryRepository;
     private final ApiKey apiKey;
 
+    @Transactional
     public Long save(RestaurantDTO restaurantDTO) {
         if (!isValidRestaurant(restaurantDTO)) {
             throw new IllegalArgumentException("올바르지 않는 식당 정보입니다.");
@@ -92,4 +104,41 @@ public class RestaurantService {
 
         return new double[]{longitude, latitude};
     }
+
+    @Transactional
+    public void addCategory(Long restaurantId, String category) {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        if (optionalRestaurant.isEmpty()) {
+            throw new IllegalArgumentException("잘못된 식당 정보입니다.");
+        }
+        RestaurantEntity restaurant = optionalRestaurant.get();
+
+        CategoryEntity categoryEntity = categoryRepository.findByName(category).orElseGet(() -> new CategoryEntity(category));
+        categoryRepository.save(categoryEntity);
+
+        if (restaurantCategoryRepository.findByRestaurantAndCategory(restaurant, categoryEntity).isPresent()) {
+            log.info("이미 존재하는 분류입니다.");
+            return;
+        }
+
+        RestaurantCategoryEntity restaurantCategoryEntity = new RestaurantCategoryEntity(restaurant, categoryEntity);
+        restaurantCategoryRepository.save(restaurantCategoryEntity);
+
+        // 관계 설정
+        restaurant.addRestaurantCategory(restaurantCategoryEntity);
+        categoryEntity.addRestaurantCategory(restaurantCategoryEntity);
+    }
+
+    public List<String> getCategories(Long restaurantId) {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        if (optionalRestaurant.isEmpty()) {
+            throw new IllegalArgumentException("잘못된 식당 정보");
+        }
+        RestaurantEntity restaurant = optionalRestaurant.get();
+
+        // TODO
+        return null;
+    }
+
+
 }

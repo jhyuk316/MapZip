@@ -7,18 +7,25 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "category")
 public class CategoryEntity {
     @Id
     @GeneratedValue
-    @Column(name="category_id")
+    @Column(name = "category_id")
     private long id;
     private String name;
 
     @OneToMany(mappedBy = "category")
     private List<RestaurantCategoryEntity> restaurantCategories = new ArrayList<>();
+
+    public CategoryEntity(String name) {
+        this.name = name;
+    }
+
+    public void addRestaurantCategory(RestaurantCategoryEntity restaurantCategory) {
+        this.restaurantCategories.add(restaurantCategory);
+    }
 }

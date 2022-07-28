@@ -38,7 +38,7 @@ class RestaurantServiceTest {
         Long savedId = restaurantService.save(restaurantDTO);
 
         // then
-        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).orElse(new RestaurantEntity());
+        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).orElseGet(RestaurantEntity::new);
         assertThat(savedId).isEqualTo(1);
         assertThat(findRestaurant.getName()).isEqualTo(restaurantDTO.getName());
         assertThat(findRestaurant.getAddress()).isEqualTo(restaurantDTO.getAddress());
