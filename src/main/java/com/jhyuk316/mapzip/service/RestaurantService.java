@@ -1,21 +1,19 @@
 package com.jhyuk316.mapzip.service;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jhyuk316.mapzip.ApiKey;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
-import java.net.URI;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -61,34 +59,35 @@ public class RestaurantService {
 
 
     public double[] addressToCoordinates(String street) {
-        RestTemplate restTemplate = new RestTemplate();
+        String NaverApiUrl = "https://naveropenapi.apigw.ntruss.com";
+        WebClient webClient = WebClient.create(NaverApiUrl);
 
-        URI uri = UriComponentsBuilder
-                .fromUriString("https://naveropenapi.apigw.ntruss.com")
-                .path("/map-geocode/v2/geocode")
-                .queryParam("query", street)
-                .encode()
-                .build()
-                .toUri();
-
-        System.out.println("uri = " + uri);
-        System.out.println("naverClientId = " + apiKey.getNaverClientId());
-        System.out.println("naverClientSecret = " + apiKey.getNaverClientSecret());
-
-        RequestEntity<Void> req = RequestEntity
-                .get(uri)
+        Mono<String> mono = webClient.get()
+                .uri(uriBuilder -> uriBuilder.path("/map-geocode/v2/geocode")
+                        .queryParam("query", street)
+                        .build())
                 .header("X-NCP-APIGW-API-KEY-ID", apiKey.getNaverClientId())
                 .header("X-NCP-APIGW-API-KEY", apiKey.getNaverClientSecret())
-                .build();
+                .exchangeToMono(clientResponse -> clientResponse.bodyToMono(String.class));
 
-        ResponseEntity<String> result = restTemplate.exchange(req, String.class);
+        String block = mono.block();
+        Gson gson = new Gson();
+        JsonObject jsonObject = gson.fromJson(block, JsonObject.class);
+        System.out.println("jsonObject = " + jsonObject);
 
-        if (result.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("식당 주소를 확인하는데 실패하였습니다.");
+        JsonArray addresses = jsonObject.get("addresses").getAsJsonArray();
+        System.out.println("addresses = " + addresses);
+
+        if (addresses.size() != 1) {
+            throw new IllegalArgumentException("잘못된 주소 입니다.");
         }
 
-        System.out.println("result = " + result);
+        JsonObject address = addresses.get(0).getAsJsonObject();
+        System.out.println("address = " + address);
 
-        return new double[]{};
+        double longitude = address.get("x").getAsDouble();
+        double latitude = address.get("y").getAsDouble();
+
+        return new double[]{longitude, latitude};
     }
 }

@@ -4,6 +4,7 @@ import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,18 +24,19 @@ class RestaurantServiceTest {
 
     @Test
     @Transactional
-    void 식당저장_주소() {
+    @DisplayName("식당 저장")
+    void restaurantSave_O() {
         // gevin
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당")
-                .address("경기도 성남시 분당구 불정로 6 그린팩토리")
+                .address("경기도 성남시 분당구 불정로 6")
                 .build();
 
         // when
         Long savedId = restaurantService.save(restaurantDTO);
 
         // then
-        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).get();
+        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).orElse(new RestaurantEntity());
         assertThat(savedId).isEqualTo(1);
         assertThat(restaurantDTO.getName()).isEqualTo(findRestaurant.getName());
         assertThat(restaurantDTO.getAddress()).isEqualTo(findRestaurant.getAddress());
@@ -42,7 +44,8 @@ class RestaurantServiceTest {
 
     @Test
     @Transactional
-    void 식당저장_정보누락() {
+    @DisplayName("식당저장_정보누락")
+    void restaurantSaveWithoutAddress_X() {
         // gevin
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당")
@@ -56,8 +59,11 @@ class RestaurantServiceTest {
     }
 
     @Test
+    @DisplayName("주소 좌표 변환 Naver API")
     void addressToCoordinates() {
-        restaurantService.addressToCoordinates("경기도 성남시 분당구 불정로 6");
-        restaurantService.addressToCoordinates("경기도 성남시 분당구 정자동 178-1");
+        double[] coordinate1 = restaurantService.addressToCoordinates("경기도 성남시 분당구 불정로 6");
+
+        assertThat(coordinate1[0]).isEqualTo(127.1054065);
+        assertThat(coordinate1[1]).isEqualTo(37.3595669);
     }
 }
