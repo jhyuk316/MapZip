@@ -21,9 +21,6 @@ public class RestaurantEntity {
 
     private double latitude;
     private double longitude;
-
-    // @Embedded
-    // private Address address;
     private String address;
 
     private String description;

@@ -12,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class RestaurantRepositoryTest {
 
@@ -32,17 +31,17 @@ public class RestaurantRepositoryTest {
         double longitude = 126.952757;
 
         restaurantRepository.save(RestaurantEntity.builder()
-                .restaurantname(name)
-                .latitude(latitude)
-                .longitude(longitude)
-                .build());
+                        .name(name)
+                        .latitude(latitude)
+                        .longitude(longitude)
+                        .build());
 
         //when
         List<RestaurantEntity> restaurantEntityList = restaurantRepository.findAll();
 
         //then
         RestaurantEntity restaurantEntity = restaurantEntityList.get(0);
-        assertThat(restaurantEntity.getRestaurantname()).isEqualTo(name);
+        assertThat(restaurantEntity.getName()).isEqualTo(name);
         assertThat(restaurantEntity.getLatitude()).isEqualTo(latitude);
         assertThat(restaurantEntity.getLongitude()).isEqualTo(longitude);
     }
