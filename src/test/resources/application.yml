@@ -1,5 +1,7 @@
 spring:
-# Datasource H2 설정
+  output:
+    ansi:
+      enabled: always
   h2:
     console:
       enabled: true
@@ -11,7 +13,7 @@ spring:
 
   jpa:
     hibernate:
-#      ddl-auto: update #update the schema with the given values.
+      #      ddl-auto: update #update the schema with the given values.
       ddl-auto: create
     #SQL문으로 출력하기
     properties:
@@ -19,6 +21,9 @@ spring:
         dialect: org.hibernate.dialect.MySQL5Dialect #OK
         format_sql: true #To beautify or pretty print the SQL
         show-sql: true #show sql
+
+  profiles:
+    include: secret # secret.yml 추가
 
   # swagger 에러 해결
   mvc:
