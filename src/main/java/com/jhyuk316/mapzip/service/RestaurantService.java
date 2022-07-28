@@ -27,14 +27,16 @@ public class RestaurantService {
             throw new IllegalArgumentException("올바르지 않는 식당 정보입니다.");
         }
 
-        log.debug("Tring to save restaurantDTO.getName() = " + restaurantDTO.getName());
-        log.debug("Tring to save restaurantDTO.getAddress() = " + restaurantDTO.getAddress());
+        log.debug("Trying  to save restaurantDTO.getName() = " + restaurantDTO.getName());
+        log.debug("Trying  to save restaurantDTO.getAddress() = " + restaurantDTO.getAddress());
+
+        double[] coordinate = addressToCoordinates(restaurantDTO.getAddress());
 
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .name(restaurantDTO.getName())
                 .address(restaurantDTO.getAddress())
-                .latitude(restaurantDTO.getLatitude())
-                .longitude(restaurantDTO.getLongtitude())
+                .longitude(coordinate[0])
+                .latitude(coordinate[1])
                 .build();
 
         restaurantRepository.save(restaurant);
