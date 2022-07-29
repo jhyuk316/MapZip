@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-@Component
+// @Component
 public class InitDB {
     private final RestaurantService restaurantService;
 
@@ -35,7 +35,10 @@ public class InitDB {
                 .address("서울특별시 관악구 신림동 1422-29")
                 .build();
 
-        restaurantService.save(restaurantDTO);
+        Long savedId = restaurantService.save(restaurantDTO);
+
+        restaurantService.addCategory(savedId, "한식");
+        restaurantService.addCategory(savedId, "김치찌개");
     }
 
 
@@ -46,7 +49,10 @@ public class InitDB {
                 .address("남부순환로 1667")
                 .build();
 
-        restaurantService.save(restaurantDTO);
+        Long savedId = restaurantService.save(restaurantDTO);
+
+        restaurantService.addCategory(savedId, "중식");
+        restaurantService.addCategory(savedId, "탕수육");
     }
 
 
