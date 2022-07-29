@@ -144,5 +144,9 @@ public class RestaurantService {
         return restaurantDTO;
     }
 
+    public RestaurantDTO getRestaurant(long id) {
+        RestaurantEntity entity = restaurantRepository.getById(id);
+        return new RestaurantDTO(entity);
+    }
 
 }

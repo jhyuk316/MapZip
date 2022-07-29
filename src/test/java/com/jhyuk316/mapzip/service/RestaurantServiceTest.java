@@ -79,8 +79,35 @@ class RestaurantServiceTest {
     }
 
     @Test
-    @DisplayName("카테고리 출력")
+    @DisplayName("카테고리 출력 패치조인")
     void getCategories() {
+        // given
+        RestaurantEntity restaurant = RestaurantEntity.builder()
+                .name("시험식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+
+        restaurantRepository.save(restaurant);
+        Long savedId = restaurant.getId();
+
+        restaurantService.addCategory(savedId, "한식");
+        restaurantService.addCategory(savedId, "김밥");
+        restaurantService.addCategory(savedId, "돈까스");
+
+        // when
+        RestaurantDTO result = restaurantService.getCategories(savedId);
+
+        // then
+        System.out.println("result.getCategories() = " + result.getCategories());
+        assertThat(result.getName()).isEqualTo(restaurant.getName());
+        assertThat(result.getAddress()).isEqualTo(restaurant.getAddress());
+        assertThat(result.getCategories()).isEqualTo(List.of("한식", "김밥", "돈까스"));
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("카테고리 출력 패치조인X")
+    void getCategories_notFetchJoin() {
         // given
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당1")
@@ -94,12 +121,14 @@ class RestaurantServiceTest {
         restaurantService.addCategory(savedId, "돈까스");
 
         // when
-        RestaurantDTO result = restaurantService.getCategories(savedId);
+        RestaurantEntity result = restaurantRepository.getById(savedId);
 
         // then
-        System.out.println("result.getCategories() = " + result.getCategories());
+        System.out.println("result.getCategories() = " + result.getRestaurantCategories());
+        result.getRestaurantCategories().forEach(restaurantCategory -> System.out.println(restaurantCategory.getCategory().getName()));
+
         assertThat(result.getName()).isEqualTo(restaurantDTO.getName());
         assertThat(result.getAddress()).isEqualTo(result.getAddress());
-        assertThat(result.getCategories()).isEqualTo(List.of("한식", "김밥", "돈까스"));
+        // assertThat(result.getCategories()).isEqualTo(List.of("한식", "김밥", "돈까스"));
     }
 }
