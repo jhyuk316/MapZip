@@ -11,7 +11,7 @@ import lombok.*;
 @Table(name = "restaurant_category")
 public class RestaurantCategoryEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "restaurant_category_id")
     private Long id;
 

@@ -10,7 +10,7 @@ import lombok.*;
 @Table(name = "youtuber")
 public class YoutuberEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "youtuber_id")
     private long id;
 

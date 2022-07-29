@@ -12,10 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class RestaurantServiceTest {
 
     @Autowired
@@ -25,7 +28,6 @@ class RestaurantServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Test
-    @Transactional
     @DisplayName("식당 저장")
     void restaurantSave_O() {
         // given
@@ -38,7 +40,7 @@ class RestaurantServiceTest {
         Long savedId = restaurantService.save(restaurantDTO);
 
         // then
-        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).orElseGet(RestaurantEntity::new);
+        RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).get();
         assertThat(savedId).isEqualTo(1);
         assertThat(findRestaurant.getName()).isEqualTo(restaurantDTO.getName());
         assertThat(findRestaurant.getAddress()).isEqualTo(restaurantDTO.getAddress());
@@ -47,7 +49,6 @@ class RestaurantServiceTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("식당저장_정보누락")
     void restaurantSaveWithoutAddress_X() {
         // given
@@ -75,5 +76,30 @@ class RestaurantServiceTest {
         // then
         assertThat(coordinate1[0]).isEqualTo(127.1054065);
         assertThat(coordinate1[1]).isEqualTo(37.3595669);
+    }
+
+    @Test
+    @DisplayName("카테고리 출력")
+    void getCategories() {
+        // given
+        RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                .name("시험식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+
+        Long savedId = restaurantService.save(restaurantDTO);
+
+        restaurantService.addCategory(savedId, "한식");
+        restaurantService.addCategory(savedId, "김밥");
+        restaurantService.addCategory(savedId, "돈까스");
+
+        // when
+        RestaurantDTO result = restaurantService.getCategories(savedId);
+
+        // then
+        System.out.println("result.getCategories() = " + result.getCategories());
+        assertThat(result.getName()).isEqualTo(restaurantDTO.getName());
+        assertThat(result.getAddress()).isEqualTo(result.getAddress());
+        assertThat(result.getCategories()).isEqualTo(List.of("한식", "김밥", "돈까스"));
     }
 }

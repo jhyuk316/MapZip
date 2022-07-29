@@ -12,4 +12,5 @@ import com.jhyuk316.mapzip.model.CategoryEntity;
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
     Optional<CategoryEntity> findByName(String name);
 
+
 }

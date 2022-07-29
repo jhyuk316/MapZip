@@ -5,8 +5,10 @@ import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import com.jhyuk316.mapzip.persistence.YoutuberRepository;
+
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,14 +39,15 @@ public class MapzipService {
         }
 
         log.info("Entity id : {}, name : {} is tried to save", restaurantEntity.getId(),
-            restaurantEntity.getName());
+                restaurantEntity.getName());
 
         restaurantRepository.save(restaurantEntity);
 
         log.info("Entity id : {}, name : {} is saved", restaurantEntity.getId(),
-            restaurantEntity.getName());
+                restaurantEntity.getName());
 
-        return restaurantRepository.findById(restaurantEntity.getId());
+        // return restaurantRepository.findById(restaurantEntity.getId());
+        return restaurantRepository.findById(restaurantEntity.getId()).stream().toList();
     }
 
     public List<RestaurantEntity> findRestaurants(final String name) {
@@ -65,19 +68,19 @@ public class MapzipService {
     }
 
     public List<RestaurantEntity> nearbyRestaurants(double latitude,
-        double longitude) {
+                                                    double longitude) {
         double diff = 0.01;
 
         List<RestaurantEntity> restList = restaurantRepository.findByLatitudeBetweenAndLongitudeBetween(
-            latitude - diff,
-            latitude + diff, longitude - diff, longitude + diff);
+                latitude - diff,
+                latitude + diff, longitude - diff, longitude + diff);
 
         restList.sort(Comparator.comparingDouble(
-            o -> (Math.abs(o.getLatitude() - latitude) + Math.abs(o.getLongitude() - longitude))));
+                o -> (Math.abs(o.getLatitude() - latitude) + Math.abs(o.getLongitude() - longitude))));
 
-//        restList.sort((o1, o2) ->
-//            (int)((Math.abs(o1.getLatitude() - latitude) + Math.abs(o1.getLongitude() - longitude)) - (
-//                Math.abs(o2.getLatitude() - latitude) + Math.abs(o2.getLongitude() - longitude))));
+        //        restList.sort((o1, o2) ->
+        //            (int)((Math.abs(o1.getLatitude() - latitude) + Math.abs(o1.getLongitude() - longitude)) - (
+        //                Math.abs(o2.getLatitude() - latitude) + Math.abs(o2.getLongitude() - longitude))));
 
         return restList;
     }

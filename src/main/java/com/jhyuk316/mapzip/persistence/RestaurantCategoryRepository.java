@@ -15,5 +15,6 @@ public interface RestaurantCategoryRepository
         extends JpaRepository<RestaurantCategoryEntity, Long> {
 
     Optional<RestaurantCategoryEntity> findByRestaurantAndCategory(RestaurantEntity restaurant, CategoryEntity category);
+    
 
 }

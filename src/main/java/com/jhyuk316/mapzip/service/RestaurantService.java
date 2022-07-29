@@ -129,15 +129,19 @@ public class RestaurantService {
         categoryEntity.addRestaurantCategory(restaurantCategoryEntity);
     }
 
-    public List<String> getCategories(Long restaurantId) {
-        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
+    public RestaurantDTO getCategories(Long restaurantId) {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithCategory(restaurantId);
         if (optionalRestaurant.isEmpty()) {
             throw new IllegalArgumentException("잘못된 식당 정보");
         }
         RestaurantEntity restaurant = optionalRestaurant.get();
 
-        // TODO
-        return null;
+        RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant);
+        for (RestaurantCategoryEntity entity : restaurant.getRestaurantCategories()) {
+            restaurantDTO.getCategories().add(entity.getCategory().getName());
+        }
+
+        return restaurantDTO;
     }
 
 
