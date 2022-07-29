@@ -20,6 +20,8 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
 
     List<RestaurantEntity> findByNameContains(String name);
 
+    List<RestaurantEntity> findByAddress(String Address);
+
     List<RestaurantEntity> findByLatitudeBetweenAndLongitudeBetween(
             double minLatitute, double maxLatitute,
             double minlongitude, double maxlongitude);

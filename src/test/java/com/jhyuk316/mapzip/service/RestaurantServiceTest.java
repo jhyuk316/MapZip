@@ -1,7 +1,11 @@
 package com.jhyuk316.mapzip.service;
 
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
+import com.jhyuk316.mapzip.model.CategoryEntity;
+import com.jhyuk316.mapzip.model.RestaurantCategoryEntity;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
+import com.jhyuk316.mapzip.persistence.CategoryRepository;
+import com.jhyuk316.mapzip.persistence.RestaurantCategoryRepository;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +32,12 @@ class RestaurantServiceTest {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private RestaurantCategoryRepository restaurantCategoryRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     // @BeforeEach
     public void insertDATA() {
         insertRestaurant("시험식당1", "서울특별시 관악구 봉천동 962-1", "한식", "김밥", "돈까스");
@@ -49,7 +59,6 @@ class RestaurantServiceTest {
 
         // then
         RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).get();
-        assertThat(savedId).isEqualTo(1);
         assertThat(findRestaurant.getName()).isEqualTo(restaurantDTO.getName());
         assertThat(findRestaurant.getAddress()).isEqualTo(restaurantDTO.getAddress());
         assertThat(findRestaurant.getLongitude()).isEqualTo(127.1054065);
@@ -103,7 +112,6 @@ class RestaurantServiceTest {
         restaurantService.addCategory(savedId, "돈까스");
 
         // when
-
         RestaurantDTO result = restaurantService.getCategories(savedId);
 
         // then
@@ -153,5 +161,46 @@ class RestaurantServiceTest {
         for (String c : category) {
             restaurantService.addCategory(savedId, c);
         }
+    }
+
+    @Test
+    @DisplayName("카테고리 추가")
+    void addCategory() {
+        // given
+        RestaurantEntity restaurant = RestaurantEntity.builder()
+                .name("식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+
+        restaurantRepository.save(restaurant);
+
+        // when
+        restaurantService.addCategory(restaurant.getId(), "한식");
+
+        // then
+        CategoryEntity category = categoryRepository.findByName("한식").get();
+        RestaurantCategoryEntity restaurantCategory = restaurantCategoryRepository.findByRestaurantAndCategory(restaurant, category).get();
+        assertThat(restaurantCategory.getRestaurant().getName()).isEqualTo(restaurant.getName());
+        assertThat(restaurantCategory.getCategory().getName()).isEqualTo(category.getName());
+    }
+
+    @Test
+    @DisplayName("카테고리 중복 추가")
+    void addCategory_X() {
+        // given
+        RestaurantEntity restaurant = RestaurantEntity.builder()
+                .name("식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+
+        restaurantRepository.save(restaurant);
+
+        // when
+        restaurantService.addCategory(restaurant.getId(), "한식");
+        Throwable thrown = catchThrowable(() -> restaurantService.addCategory(restaurant.getId(), "한식"));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
+        assertThat(thrown.getMessage()).contains("카테고리 중복");
     }
 }

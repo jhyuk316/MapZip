@@ -117,8 +117,7 @@ public class RestaurantService {
         categoryRepository.save(categoryEntity);
 
         if (restaurantCategoryRepository.findByRestaurantAndCategory(restaurant, categoryEntity).isPresent()) {
-            log.info("이미 존재하는 분류입니다.");
-            return;
+            throw new IllegalArgumentException("카테고리 중복, 이미 있는 카테고리에요.");
         }
 
         RestaurantCategoryEntity restaurantCategoryEntity = new RestaurantCategoryEntity(restaurant, categoryEntity);
