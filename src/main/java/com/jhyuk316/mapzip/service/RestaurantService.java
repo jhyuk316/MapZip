@@ -39,6 +39,10 @@ public class RestaurantService {
             throw new IllegalArgumentException("올바르지 않는 식당 정보입니다.");
         }
 
+        if (!isDuplicateRestaurant(restaurantDTO)) {
+
+        }
+
         log.debug("Trying  to save restaurantDTO.getName() = " + restaurantDTO.getName());
         log.debug("Trying  to save restaurantDTO.getAddress() = " + restaurantDTO.getAddress());
 
@@ -54,6 +58,10 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
 
         return restaurant.getId();
+    }
+
+    private boolean isDuplicateRestaurant(RestaurantDTO restaurantDTO) {
+        return false;
     }
 
     private boolean isValidRestaurant(RestaurantDTO restaurantDTO) {

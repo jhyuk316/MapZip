@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 
 @RequiredArgsConstructor
-@Component
+// @Component
 public class InitTestDB {
     private final RestaurantService restaurantService;
     private final RestaurantRepository restaurantRepository;

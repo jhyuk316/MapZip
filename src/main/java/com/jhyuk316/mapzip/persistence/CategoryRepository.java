@@ -20,4 +20,11 @@ public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> 
             "where c.id = :id")
     Optional<CategoryEntity> findByIdWithRestaurants(@Param("id") Long id);
 
+    @Query("select c " +
+            "from CategoryEntity c " +
+            "join fetch c.restaurantCategories rc " +
+            "join fetch rc.restaurant r " +
+            "where c.name = :name")
+    Optional<CategoryEntity> findByNameWithRestaurants(@Param("name") String name);
+
 }

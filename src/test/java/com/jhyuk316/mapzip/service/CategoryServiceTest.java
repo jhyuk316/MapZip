@@ -45,7 +45,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("분류별 식당리스트 조회")
+    @DisplayName("카테고리 ID로 식당리스트 조회")
     void getRestaurants() {
         // given
 
@@ -58,6 +58,21 @@ class CategoryServiceTest {
         assertThat(result.getName()).isEqualTo("한식");
         assertThat(result.getRestaurants()).isEqualTo(List.of("시험식당1", "시험식당2"));
         // TODO 왜 두번 중복 되서 나오는가? 왜?!
+    }
+
+    @Test
+    @DisplayName("카테고리 이름으로 식당리스트 조회")
+    void getRestaurantsByName() {
+        // given
+
+        // when
+        CategoryDTO result = categoryService.getRestaurants("한식");
+        System.out.println("size = " + restaurantRepository.findAll().size());
+
+        // then
+        System.out.println("result.getRestaurants() = " + result.getRestaurants());
+        assertThat(result.getName()).isEqualTo("한식");
+        assertThat(result.getRestaurants()).isEqualTo(List.of("시험식당1", "시험식당2"));
     }
 
     private void insertRestaurant(String name, String address, String... category) {

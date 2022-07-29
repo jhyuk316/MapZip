@@ -31,16 +31,25 @@ public class CategoryService {
         if (optionalCategory.isEmpty()) {
             throw new IllegalArgumentException("잘못된 카테고리");
         }
-
         CategoryEntity category = optionalCategory.get();
-
-        System.out.println("category.getRestaurantCategories().size() = " + category.getRestaurantCategories().size());
 
         CategoryDTO categoryDTO = new CategoryDTO(category);
         for (RestaurantCategoryEntity rc : category.getRestaurantCategories()) {
-            System.out.println("rc.getId() = " + rc.getId());
-            System.out.println("rc.getCategory() = " + rc.getCategory().getName());
-            System.out.println("rc.getRestaurant() = " + rc.getRestaurant().getName());
+            categoryDTO.getRestaurants().add(rc.getRestaurant().getName());
+        }
+
+        return categoryDTO;
+    }
+
+    public CategoryDTO getRestaurants(String categoryName) {
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findByNameWithRestaurants(categoryName);
+        if (optionalCategory.isEmpty()) {
+            throw new IllegalArgumentException("잘못된 카테고리");
+        }
+        CategoryEntity category = optionalCategory.get();
+
+        CategoryDTO categoryDTO = new CategoryDTO(category);
+        for (RestaurantCategoryEntity rc : category.getRestaurantCategories()) {
             categoryDTO.getRestaurants().add(rc.getRestaurant().getName());
         }
 
