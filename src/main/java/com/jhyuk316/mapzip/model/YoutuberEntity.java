@@ -20,7 +20,7 @@ public class YoutuberEntity {
     private String name;
     private String channelId;
 
-    @OneToMany
+    @OneToMany(mappedBy = "youtuber")
     private final List<RestaurantYoutuberEntity> restaurantYoutubers = new ArrayList<>();
 
     @Builder

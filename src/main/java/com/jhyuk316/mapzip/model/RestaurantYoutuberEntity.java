@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class RestaurantYoutuberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "restaurant_youtuber_id")
     private Long id;
 
     private String videoId;

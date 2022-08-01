@@ -1,6 +1,8 @@
 package com.jhyuk316.mapzip.service;
 
+import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.dto.YoutuberDTO;
+import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.model.RestaurantYoutuberEntity;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
 import com.jhyuk316.mapzip.persistence.YoutuberRepository;
@@ -8,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,12 +43,13 @@ public class YoutuberService {
         }
 
         YoutuberEntity youtuber = optionalYoutuber.get();
-
+        YoutuberDTO youtuberDTO = new YoutuberDTO(youtuber);
         for (RestaurantYoutuberEntity restaurantYoutuber : youtuber.getRestaurantYoutubers()) {
-            System.out.println("restaurantYoutuber.getRestaurant().getName() = " + restaurantYoutuber.getRestaurant().getName());
+            RestaurantEntity restaurant = restaurantYoutuber.getRestaurant();
+            youtuberDTO.getRestaurants().add(new YoutuberDTO.InnerRestaurantDTO(restaurant));
         }
 
-        return new YoutuberDTO(youtuber);
+        return youtuberDTO;
     }
 
 }
