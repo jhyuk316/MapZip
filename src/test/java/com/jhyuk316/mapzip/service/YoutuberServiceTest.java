@@ -51,17 +51,41 @@ class YoutuberServiceTest {
     }
 
     @Test
-    @DisplayName("유튜버 저장 이름 누락")
-    void saveWithoutName_X() {
+    @DisplayName("유튜버 저장 채널명, 채널ID 누락")
+    void saveWithoutNameAndId_X() {
         // given
         YoutuberDTO youtuberDTO = YoutuberDTO.builder()
-                .channelId("Abcd")
                 .build();
 
         // when
         Throwable thrown = catchThrowable(() -> youtuberService.save(youtuberDTO));
 
         // then
+        assertThat(thrown).hasMessageContaining("채널이름");
+        assertThat(thrown).hasMessageContaining("채널ID");
+    }
+
+    @Test
+    @DisplayName("유튜버 저장 중복")
+    void saveDuplicate_X() {
+        // given
+        YoutuberDTO youtuberDTO1 = YoutuberDTO.builder()
+                .name("유튜버A")
+                .channelId("Abcd")
+                .build();
+
+        YoutuberDTO youtuberDTO2 = YoutuberDTO.builder()
+                .name("유튜버B")
+                .channelId("Abcd")
+                .build();
+
+        youtuberService.save(youtuberDTO1);
+
+        // when
+        Throwable thrown = catchThrowable(() -> youtuberService.save(youtuberDTO2));
+
+        // then
+        assertThat(thrown).hasMessageContaining("이미 있는 유튜버");
     }
 
 

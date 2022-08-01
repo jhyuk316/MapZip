@@ -13,18 +13,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 @Transactional(readOnly = true)
 @Service
 public class YoutuberService {
     private final YoutuberRepository youtuberRepository;
 
-    public Long save(YoutuberDTO youtuber) {
-        // TODO - DTO 검증
+    public Long save(@Valid YoutuberDTO youtuber) {
+        if (isDuplicateYoutuber(youtuber)) {
+            throw new IllegalArgumentException("이미 있는 유튜버에요.");
+        }
 
         YoutuberEntity entity = YoutuberEntity.builder()
                 .name(youtuber.getName())
@@ -34,6 +38,10 @@ public class YoutuberService {
         youtuberRepository.save(entity);
 
         return entity.getId();
+    }
+
+    private boolean isDuplicateYoutuber(YoutuberDTO youtuber) {
+        return youtuberRepository.findByChannelId(youtuber.getChannelId()).isPresent();
     }
 
     public YoutuberDTO getYoutuberWithRestaurant(Long id) {

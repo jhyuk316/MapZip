@@ -11,8 +11,9 @@ import java.util.Optional;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
 
 @Repository
-public interface YoutuberRepository extends JpaRepository<YoutuberEntity, Integer> {
-    Optional<YoutuberEntity> findById(Long id);
+public interface YoutuberRepository extends JpaRepository<YoutuberEntity, Long> {
+
+    Optional<YoutuberEntity> findByChannelId(String channelId);
 
     List<YoutuberEntity> findByName(String name);
 
