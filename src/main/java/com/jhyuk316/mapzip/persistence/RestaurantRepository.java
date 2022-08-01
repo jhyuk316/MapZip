@@ -18,6 +18,8 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
 
     Optional<RestaurantEntity> findById(Long id);
 
+    Optional<RestaurantEntity> findByName(String name);
+
     List<RestaurantEntity> findByNameContains(String name);
 
     List<RestaurantEntity> findByAddress(String Address);
@@ -34,5 +36,12 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
             "join fetch rc.category c " +
             "where r.id = :id")
     Optional<RestaurantEntity> findByIdWithCategory(@Param("id") Long id);
+
+    @Query("select r " +
+            "from RestaurantEntity r " +
+            "join fetch r.restaurantCategories rc " +
+            "join fetch rc.category c " +
+            "where r.name = :name")
+    Optional<RestaurantEntity> findByNameWithCategory(@Param("name") String name);
 
 }

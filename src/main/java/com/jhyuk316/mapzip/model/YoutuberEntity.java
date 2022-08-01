@@ -4,6 +4,9 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @NoArgsConstructor
 @Getter
 @Entity
@@ -15,12 +18,21 @@ public class YoutuberEntity {
     private long id;
 
     private String name;
-    private String url;
+    private String channelId;
+
+    @OneToMany
+    private final List<RestaurantYoutuberEntity> restaurantYoutubers = new ArrayList<>();
 
     @Builder
-    public YoutuberEntity(long id, String name, String url) {
+    public YoutuberEntity(long id, String name, String channelId) {
         this.id = id;
         this.name = name;
-        this.url = url;
+        this.channelId = channelId;
     }
+
+    public void addRestaurantYoutuber(RestaurantYoutuberEntity restaurantYoutuber) {
+        this.restaurantYoutubers.add(restaurantYoutuber);
+    }
+
+
 }

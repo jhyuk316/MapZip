@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,20 +16,22 @@ import lombok.NoArgsConstructor;
 public class YoutuberDTO {
     private long id;
     private String name;
-    private String url;
+    private String channelId;
+
+    private final List<RestaurantDTO> restaurants = new ArrayList<>();
 
     public YoutuberDTO(final YoutuberEntity entity) {
         this.id = entity.getId();
         this.name = entity.getName();
-        this.url = entity.getUrl();
+        this.channelId = entity.getChannelId();
     }
 
     public YoutuberEntity toEntity() {
         return YoutuberEntity.builder()
-            .id(id)
-            .name(name)
-            .url(url)
-            .build();
+                .id(id)
+                .name(name)
+                .channelId(channelId)
+                .build();
     }
 
 }

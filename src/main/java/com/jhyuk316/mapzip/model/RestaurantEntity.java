@@ -30,7 +30,10 @@ public class RestaurantEntity {
     private float rating;
 
     @OneToMany(mappedBy = "restaurant")
-    private List<RestaurantCategoryEntity> restaurantCategories = new ArrayList<>();
+    private final List<RestaurantCategoryEntity> restaurantCategories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "restaurant")
+    private final List<RestaurantYoutuberEntity> restaurantYoutubers = new ArrayList<>();
 
     @Builder
     public RestaurantEntity(long id, String name, double latitude, double longitude, String address, String description, float rating) {
@@ -45,6 +48,10 @@ public class RestaurantEntity {
 
     public void addRestaurantCategory(RestaurantCategoryEntity restaurantCategory) {
         this.restaurantCategories.add(restaurantCategory);
+    }
+
+    public void addRestaurantYoutuber(RestaurantYoutuberEntity restaurantYoutuber) {
+        this.restaurantYoutubers.add(restaurantYoutuber);
     }
 
 }

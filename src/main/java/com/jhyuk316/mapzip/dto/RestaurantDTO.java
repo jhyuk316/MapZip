@@ -23,6 +23,8 @@ public class RestaurantDTO {
 
     private final List<String> categories = new ArrayList<>();
 
+    private final List<YoutuberDTO> youtubers = new ArrayList<>();
+
     public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();
         name = entity.getName();

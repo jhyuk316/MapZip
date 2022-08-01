@@ -19,7 +19,7 @@ public class CategoryEntity {
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private List<RestaurantCategoryEntity> restaurantCategories = new ArrayList<>();
+    private final List<RestaurantCategoryEntity> restaurantCategories = new ArrayList<>();
 
     public CategoryEntity(String name) {
         this.name = name;

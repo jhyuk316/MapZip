@@ -5,12 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jhyuk316.mapzip.ApiKey;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
-import com.jhyuk316.mapzip.model.CategoryEntity;
-import com.jhyuk316.mapzip.model.RestaurantCategoryEntity;
-import com.jhyuk316.mapzip.model.RestaurantEntity;
-import com.jhyuk316.mapzip.persistence.CategoryRepository;
-import com.jhyuk316.mapzip.persistence.RestaurantCategoryRepository;
-import com.jhyuk316.mapzip.persistence.RestaurantRepository;
+import com.jhyuk316.mapzip.dto.YoutuberDTO;
+import com.jhyuk316.mapzip.model.*;
+import com.jhyuk316.mapzip.persistence.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +28,8 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final CategoryRepository categoryRepository;
     private final RestaurantCategoryRepository restaurantCategoryRepository;
+    private final YoutuberRepository youtuberRepository;
+    private final RestaurantYoutuberRepository restaurantYoutuberRepository;
     private final ApiKey apiKey;
 
     @Transactional
@@ -43,6 +42,10 @@ public class RestaurantService {
         log.debug("Trying  to save restaurantDTO.getAddress() = " + restaurantDTO.getAddress());
 
         Address address = addressToCoordinates(restaurantDTO.getAddress());
+
+        if (isDuplicateRestaurant(restaurantDTO, address)) {
+            throw new IllegalArgumentException("이미 등록된 식당이에요.");
+        }
 
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .name(restaurantDTO.getName())
@@ -58,8 +61,14 @@ public class RestaurantService {
         return restaurant.getId();
     }
 
-    private boolean isDuplicateRestaurant(RestaurantDTO restaurantDTO) {
-        return false;
+    private boolean isDuplicateRestaurant(RestaurantDTO restaurantDTO, Address address) {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByName(restaurantDTO.getName());
+        if (optionalRestaurant.isEmpty()) {
+            return false;
+        }
+
+        RestaurantEntity restaurant = optionalRestaurant.get();
+        return restaurant.getAddress().equals(address.getRoad());
     }
 
     private boolean isValidRestaurant(RestaurantDTO restaurantDTO) {
@@ -175,6 +184,27 @@ public class RestaurantService {
     public RestaurantDTO getRestaurant(long id) {
         RestaurantEntity entity = restaurantRepository.getById(id);
         return new RestaurantDTO(entity);
+    }
+
+    public void addYoutuber(Long restaurantId, Long youtuberId, String videoId) {
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
+        if (optionalRestaurant.isEmpty()) {
+            throw new IllegalArgumentException("잘못된 식당_ID");
+        }
+        Optional<YoutuberEntity> optionalYoutuber = youtuberRepository.findById(youtuberId);
+        if (optionalYoutuber.isEmpty()) {
+            throw new IllegalArgumentException("잘못된 유튜버_ID");
+        }
+
+        RestaurantEntity restaurant = optionalRestaurant.get();
+        YoutuberEntity youtuber = optionalYoutuber.get();
+
+        RestaurantYoutuberEntity restaurantYoutuber = new RestaurantYoutuberEntity(restaurant, youtuber, videoId);
+
+        restaurant.addRestaurantYoutuber(restaurantYoutuber);
+        youtuber.addRestaurantYoutuber(restaurantYoutuber);
+        
+        restaurantYoutuberRepository.save(restaurantYoutuber);
     }
 
 }

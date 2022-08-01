@@ -1,12 +1,9 @@
 package com.jhyuk316.mapzip.service;
 
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
-import com.jhyuk316.mapzip.model.CategoryEntity;
-import com.jhyuk316.mapzip.model.RestaurantCategoryEntity;
-import com.jhyuk316.mapzip.model.RestaurantEntity;
-import com.jhyuk316.mapzip.persistence.CategoryRepository;
-import com.jhyuk316.mapzip.persistence.RestaurantCategoryRepository;
-import com.jhyuk316.mapzip.persistence.RestaurantRepository;
+import com.jhyuk316.mapzip.dto.YoutuberDTO;
+import com.jhyuk316.mapzip.model.*;
+import com.jhyuk316.mapzip.persistence.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -38,6 +35,12 @@ class RestaurantServiceTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private YoutuberRepository youtuberRepository;
+
+    @Autowired
+    private RestaurantYoutuberRepository restaurantYoutuberRepository;
+
     // @BeforeEach
     public void insertDATA() {
         insertRestaurant("시험식당1", "서울특별시 관악구 봉천동 962-1", "한식", "김밥", "돈까스");
@@ -60,7 +63,7 @@ class RestaurantServiceTest {
         // then
         RestaurantEntity findRestaurant = restaurantRepository.findById(savedId).get();
         assertThat(findRestaurant.getName()).isEqualTo(restaurantDTO.getName());
-        assertThat(findRestaurant.getAddress()).isEqualTo(restaurantDTO.getAddress());
+        assertThat(findRestaurant.getAddress()).isEqualTo("경기도 성남시 분당구 불정로 6 NAVER그린팩토리");
         assertThat(findRestaurant.getLongitude()).isEqualTo(127.1054065);
         assertThat(findRestaurant.getLatitude()).isEqualTo(37.3595669);
     }
@@ -78,6 +81,27 @@ class RestaurantServiceTest {
 
         // then
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
+
+        assertThat(thrown).hasMessageContaining("올바르지 않는 식당 정보");
+    }
+
+    @Test
+    @DisplayName("식당저장_중복된 식당")
+    void restaurantSaveDuplicate_X() {
+        // given
+        RestaurantDTO restaurantDTO = RestaurantDTO.builder()
+                .name("시험식당")
+                .address("경기도 성남시 분당구 불정로 6")
+                .build();
+
+
+        // when
+        Long savedId = restaurantService.save(restaurantDTO);
+        Throwable thrown = catchThrowable(() -> restaurantService.save(restaurantDTO));
+
+        // then
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
+        assertThat(thrown).hasMessageContaining("등록된 식당");
     }
 
     @Test
@@ -203,5 +227,34 @@ class RestaurantServiceTest {
         // then
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
         assertThat(thrown.getMessage()).contains("카테고리 중복");
+    }
+
+    @Test
+    @DisplayName("유튜버 추가")
+    void addYoutuber() {
+        // given
+        RestaurantEntity restaurant = RestaurantEntity.builder()
+                .name("식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+
+        YoutuberEntity youtuber = YoutuberEntity.builder()
+                .name("유튜버A")
+                .channelId("Abcd")
+                .build();
+
+
+        restaurantRepository.save(restaurant);
+        youtuberRepository.save(youtuber);
+        String videoId = "Qwer";
+
+        // when
+        restaurantService.addYoutuber(restaurant.getId(), youtuber.getId(), videoId);
+
+        // then
+        RestaurantYoutuberEntity restaurantYoutuber = restaurantYoutuberRepository.findByRestaurantAndYoutuber(restaurant, youtuber).get();
+        assertThat(restaurantYoutuber.getRestaurant().getId()).isEqualTo(restaurant.getId());
+        assertThat(restaurantYoutuber.getYoutuber().getId()).isEqualTo(youtuber.getId());
+        assertThat(restaurantYoutuber.getVideoId()).isEqualTo(videoId);
     }
 }
