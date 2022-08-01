@@ -85,14 +85,15 @@ class RestaurantServiceTest {
     @DisplayName("주소 좌표 변환 Naver API")
     void addressToCoordinates() {
         // given
-        String address = "경기도 성남시 분당구 불정로 6";
+        String addressString = "경기도 성남시 분당구 불정로 6";
 
         // when
-        double[] coordinate1 = restaurantService.addressToCoordinates(address);
+        RestaurantService.Address newAddress = restaurantService.addressToCoordinates(addressString);
 
         // then
-        assertThat(coordinate1[0]).isEqualTo(127.1054065);
-        assertThat(coordinate1[1]).isEqualTo(37.3595669);
+        assertThat(newAddress.getRoad()).isEqualTo("경기도 성남시 분당구 불정로 6 NAVER그린팩토리");
+        assertThat(newAddress.getLongitude()).isEqualTo(127.1054065);
+        assertThat(newAddress.getLatitude()).isEqualTo(37.3595669);
     }
 
     @Test

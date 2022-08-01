@@ -39,23 +39,21 @@ public class RestaurantService {
             throw new IllegalArgumentException("올바르지 않는 식당 정보입니다.");
         }
 
-        if (!isDuplicateRestaurant(restaurantDTO)) {
-
-        }
-
         log.debug("Trying  to save restaurantDTO.getName() = " + restaurantDTO.getName());
         log.debug("Trying  to save restaurantDTO.getAddress() = " + restaurantDTO.getAddress());
 
-        double[] coordinate = addressToCoordinates(restaurantDTO.getAddress());
+        Address address = addressToCoordinates(restaurantDTO.getAddress());
 
         RestaurantEntity restaurant = RestaurantEntity.builder()
                 .name(restaurantDTO.getName())
-                .address(restaurantDTO.getAddress())
-                .longitude(coordinate[0])
-                .latitude(coordinate[1])
+                .address(address.getRoad())
+                .longitude(address.getLongitude())
+                .latitude(address.getLatitude())
                 .build();
 
         restaurantRepository.save(restaurant);
+
+        log.info("Restaurant id: {}, name: {} 으로 저장했어요.", restaurant.getId(), restaurant.getName());
 
         return restaurant.getId();
     }
@@ -79,8 +77,31 @@ public class RestaurantService {
         return true;
     }
 
+    static class Address {
+        private final String road; // 도로명 주소
+        private final double longitude;
+        private final double latitude;
 
-    public double[] addressToCoordinates(String street) {
+        public Address(String road, double longitude, double latitude) {
+            this.road = road;
+            this.longitude = longitude;
+            this.latitude = latitude;
+        }
+
+        public String getRoad() {
+            return road;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+    }
+
+    public Address addressToCoordinates(String street) {
         String NaverApiUrl = "https://naveropenapi.apigw.ntruss.com";
         WebClient webClient = WebClient.create(NaverApiUrl);
 
@@ -101,16 +122,16 @@ public class RestaurantService {
         System.out.println("addresses = " + addresses);
 
         if (addresses.size() != 1) {
-            throw new IllegalArgumentException("잘못된 주소 입니다.");
+            throw new IllegalArgumentException("잘못된 주소에요. 정확한 주소를 주세요.");
         }
 
         JsonObject address = addresses.get(0).getAsJsonObject();
-        System.out.println("address = " + address);
 
+        String road = address.get("roadAddress").getAsString();
         double longitude = address.get("x").getAsDouble();
         double latitude = address.get("y").getAsDouble();
 
-        return new double[]{longitude, latitude};
+        return new Address(road, longitude, latitude);
     }
 
     @Transactional
