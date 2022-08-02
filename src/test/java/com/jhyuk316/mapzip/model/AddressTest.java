@@ -1,6 +1,7 @@
 package com.jhyuk316.mapzip.model;
 
 import com.jhyuk316.mapzip.ApiKey;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,13 +17,13 @@ class AddressTest {
     private String naverClientSecret;
 
     @Test
+    @Disabled
     void setAddress() {
 
         System.out.println("naverClientId = " + naverClientId);
         System.out.println("naverClientSecret = " + naverClientSecret);
 
         // address.setAddress("경기도 성남시 분당구 불정로 6 그린팩토리");
-
 
 
     }

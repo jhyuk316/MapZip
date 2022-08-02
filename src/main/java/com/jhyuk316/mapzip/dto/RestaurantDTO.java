@@ -4,6 +4,7 @@ import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,15 +14,17 @@ import java.util.List;
 @Data
 public class RestaurantDTO {
     private long id;
+    @NotNull
     private String name;
     private double latitude;
     private double longtitude;
+    @NotNull
     private String address;
     private float rating;
 
-    private List<String> categories;
+    private List<String> categories = new ArrayList<>();
 
-    private List<InnerYoutuberDTO> youtubers;
+    private List<InnerYoutuberDTO> youtubers = new ArrayList<>();
 
     public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();

@@ -1,6 +1,7 @@
 package com.jhyuk316.mapzip.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import lombok.*;
 
@@ -18,15 +19,18 @@ public class RestaurantEntity {
     @Column(name = "restaurant_id")
     private long id;
 
+    @NotNull
     private String name;
 
+    @NotNull
     private double latitude;
+    @NotNull
     private double longitude;
+    @NotNull
     private String address;
 
     private String description;
 
-    @Column(nullable = true)
     private float rating;
 
     @OneToMany(mappedBy = "restaurant")

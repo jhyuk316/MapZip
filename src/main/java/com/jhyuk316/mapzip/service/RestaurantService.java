@@ -16,7 +16,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -137,6 +139,11 @@ public class RestaurantService {
         JsonObject address = addresses.get(0).getAsJsonObject();
 
         String road = address.get("roadAddress").getAsString();
+
+        // TODO 깔끔한 검증 위치는?
+        if (!StringUtils.hasText(road)) {
+            throw new IllegalArgumentException("잘못된 주소에요. 정확한 주소를 주세요.");
+        }
         double longitude = address.get("x").getAsDouble();
         double latitude = address.get("y").getAsDouble();
 
@@ -171,11 +178,8 @@ public class RestaurantService {
     }
 
     public RestaurantDTO getCategories(Long restaurantId) {
-        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithCategory(restaurantId);
-        if (optionalRestaurant.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 식당 정보");
-        }
-        RestaurantEntity restaurant = optionalRestaurant.get();
+        RestaurantEntity restaurant = restaurantRepository.findByIdWithCategory(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID"));
 
         RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant);
         for (RestaurantCategoryEntity entity : restaurant.getRestaurantCategories()) {
@@ -188,6 +192,22 @@ public class RestaurantService {
     public RestaurantDTO getRestaurant(long id) {
         RestaurantEntity entity = restaurantRepository.getById(id);
         return new RestaurantDTO(entity);
+    }
+
+
+    public List<RestaurantDTO> getRestaurantByCoordination(double latitude, double longitude) {
+        return getRestaurantByCoordination(latitude, longitude, 3);
+    }
+
+    public List<RestaurantDTO> getRestaurantByCoordination(double latitude, double longitude, double level) {
+        double diff = 0.0001 * Math.pow(10, level);
+
+        List<RestaurantEntity> restaurants = restaurantRepository.findByLatitudeBetweenAndLongitudeBetween(latitude - diff, latitude + diff, longitude - diff, longitude + diff);
+        restaurants.sort(Comparator.comparingDouble(
+                o -> (Math.abs(o.getLatitude() - latitude) + Math.abs(o.getLongitude() - longitude))
+        ));
+
+        return restaurants.stream().map(RestaurantDTO::new).toList();
     }
 
     public void addYoutuber(Long restaurantId, Long youtuberId, String videoId) {
@@ -204,9 +224,9 @@ public class RestaurantService {
         restaurantYoutuberRepository.save(restaurantYoutuber);
     }
 
-    public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long id) {
+    public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long restaurantId) {
         List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS = new ArrayList<>();
-        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithYoutuber(id);
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithYoutuber(restaurantId);
 
         if (optionalRestaurant.isPresent()) {
             RestaurantEntity restaurant = optionalRestaurant.get();

@@ -3,14 +3,14 @@ package com.jhyuk316.mapzip.service;
 import com.jhyuk316.mapzip.dto.CategoryDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.hibernate.id.UUIDGenerator;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,13 +23,6 @@ class CategoryServiceTest {
     private RestaurantRepository restaurantRepository;
     @Autowired
     private CategoryService categoryService;
-
-    @BeforeEach
-    public void insertDATA() {
-        insertRestaurant("시험식당1", "서울특별시 관악구 봉천동 962-1", "한식", "김밥", "돈까스");
-        insertRestaurant("시험식당2", "서울특별시 관악구 신림동 1422-29", "한식", "김치찌개");
-        insertRestaurant("시험식당3", "남부순환로 1667", "중식", "탕수육");
-    }
 
     @Test
     void getCategory() {
@@ -48,45 +41,59 @@ class CategoryServiceTest {
     @DisplayName("카테고리 ID로 식당리스트 조회")
     void getRestaurants() {
         // given
+        String restaurantName1 = UUID.randomUUID().toString();
+        String restaurantName2 = UUID.randomUUID().toString();
+        String restaurantName3 = UUID.randomUUID().toString();
+        String tag1 = UUID.randomUUID().toString();
+        Long savedId1 = insertRestaurant(restaurantName1, "서울특별시 관악구 봉천동 962-1", tag1, "김밥", "돈까스");
+        Long savedId2 = insertRestaurant(restaurantName2, "서울특별시 관악구 신림동 1422-29", tag1, "김치찌개");
+        Long savedId3 = insertRestaurant(restaurantName3, "남부순환로 1667", "중식", "탕수육");
 
         // when
-        Long getId = categoryService.getCategory("한식").getId();
+        Long getId = categoryService.getCategory(tag1).getId();
         CategoryDTO result = categoryService.getRestaurants(getId);
 
         // then
-        System.out.println("result.getRestaurants() = " + result.getRestaurants());
-        assertThat(result.getName()).isEqualTo("한식");
-        assertThat(result.getRestaurants()).isEqualTo(List.of("시험식당1", "시험식당2"));
-        // TODO 왜 두번 중복 되서 나오는가? 왜?!
+        assertThat(result.getName()).isEqualTo(tag1);
+        assertThat(result.getRestaurants()).contains(restaurantName1, restaurantName2);
+
+        // TODO 왜 두번 중복 되서 나오는가? 왜?! 랜덤이 답인가?
     }
 
     @Test
     @DisplayName("카테고리 이름으로 식당리스트 조회")
     void getRestaurantsByName() {
         // given
+        String restaurantName1 = UUID.randomUUID().toString();
+        String restaurantName2 = UUID.randomUUID().toString();
+        String restaurantName3 = UUID.randomUUID().toString();
+        String tag1 = UUID.randomUUID().toString();
+        Long savedId1 = insertRestaurant(restaurantName1, "서울특별시 관악구 봉천동 962-1", tag1, "김밥", "돈까스");
+        Long savedId2 = insertRestaurant(restaurantName2, "서울특별시 관악구 신림동 1422-29", tag1, "김치찌개");
+        Long savedId3 = insertRestaurant(restaurantName3, "남부순환로 1667", "중식", "탕수육");
 
         // when
-        CategoryDTO result = categoryService.getRestaurants("한식");
-        System.out.println("size = " + restaurantRepository.findAll().size());
+        CategoryDTO result = categoryService.getRestaurants(tag1);
 
         // then
-        System.out.println("result.getRestaurants() = " + result.getRestaurants());
-        assertThat(result.getName()).isEqualTo("한식");
-        assertThat(result.getRestaurants()).isEqualTo(List.of("시험식당1", "시험식당2"));
+        assertThat(result.getName()).isEqualTo(tag1);
+        assertThat(result.getRestaurants()).contains(restaurantName1, restaurantName2);
     }
 
-    private void insertRestaurant(String name, String address, String... category) {
-        RestaurantEntity restaurant1 = RestaurantEntity.builder()
+    private Long insertRestaurant(String name, String address, String... category) {
+        RestaurantEntity restaurant = RestaurantEntity.builder()
                 .name(name)
                 .address(address)
                 .build();
 
-        restaurantRepository.save(restaurant1);
-        Long savedId = restaurant1.getId();
+        restaurantRepository.save(restaurant);
+        Long savedId = restaurant.getId();
 
         for (String c : category) {
             restaurantService.addCategory(savedId, c);
         }
+
+        return savedId;
     }
 
 
