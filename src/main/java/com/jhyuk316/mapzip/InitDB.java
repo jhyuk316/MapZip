@@ -1,9 +1,9 @@
 package com.jhyuk316.mapzip;
 
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
-import com.jhyuk316.mapzip.model.RestaurantEntity;
-import com.jhyuk316.mapzip.persistence.RestaurantRepository;
+import com.jhyuk316.mapzip.dto.YoutuberDTO;
 import com.jhyuk316.mapzip.service.RestaurantService;
+import com.jhyuk316.mapzip.service.YoutuberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -13,12 +13,20 @@ import javax.annotation.PostConstruct;
 // @Component
 public class InitDB {
     private final RestaurantService restaurantService;
+    private final YoutuberService youtuberService;
+
+    @PostConstruct
+    private void insertYoutuber() {
+        insertYoutuber("유튜버A", "ChanA");
+        insertYoutuber("유튜버B", "ChanB");
+        insertYoutuber("유튜버C", "ChanC");
+    }
 
     @PostConstruct
     private void insertRestaurat1() {
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당1")
-                .address("서울특별시 관악구 봉천동 962-1")
+                .address("서울특별시 관악구 봉천동 963-9")
                 .build();
 
         Long savedId = restaurantService.save(restaurantDTO);
@@ -26,6 +34,9 @@ public class InitDB {
         restaurantService.addCategory(savedId, "한식");
         restaurantService.addCategory(savedId, "김밥");
         restaurantService.addCategory(savedId, "돈까스");
+
+        restaurantService.addYoutuber(savedId, 1L, "VideoA1");
+        restaurantService.addYoutuber(savedId, 2L, "VideoB1");
     }
 
     @PostConstruct
@@ -39,6 +50,8 @@ public class InitDB {
 
         restaurantService.addCategory(savedId, "한식");
         restaurantService.addCategory(savedId, "김치찌개");
+
+        restaurantService.addYoutuber(savedId, 1L, "VideoA2");
     }
 
 
@@ -55,5 +68,13 @@ public class InitDB {
         restaurantService.addCategory(savedId, "탕수육");
     }
 
+    private void insertYoutuber(String name, String chanA) {
+        YoutuberDTO youtuberDTO = YoutuberDTO.builder()
+                .name(name)
+                .channelId(chanA)
+                .build();
+
+        youtuberService.save(youtuberDTO);
+    }
 
 }
