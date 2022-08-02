@@ -44,4 +44,11 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
             "where r.name = :name")
     Optional<RestaurantEntity> findByNameWithCategory(@Param("name") String name);
 
+    @Query("select r " +
+            "from RestaurantEntity r " +
+            "join fetch r.restaurantYoutubers ry " +
+            "join fetch ry.youtuber y " +
+            "where r.id = :id")
+    Optional<RestaurantEntity> findByIdWithYoutuber(@Param("id") Long id);
+
 }

@@ -1,10 +1,8 @@
 package com.jhyuk316.mapzip.dto;
 
 import com.jhyuk316.mapzip.model.RestaurantEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.jhyuk316.mapzip.model.YoutuberEntity;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +19,9 @@ public class RestaurantDTO {
     private String address;
     private float rating;
 
-    private final List<String> categories = new ArrayList<>();
+    private List<String> categories;
 
-    private final List<YoutuberDTO> youtubers = new ArrayList<>();
+    private List<InnerYoutuberDTO> youtubers;
 
     public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();
@@ -45,5 +43,16 @@ public class RestaurantDTO {
                 .build();
     }
 
+    @EqualsAndHashCode
+    public static class InnerYoutuberDTO {
+        private final long id;
+        private final String name;
+        private final String channelId;
 
+        public InnerYoutuberDTO(YoutuberEntity youtuber) {
+            this.id = youtuber.getId();
+            this.name = youtuber.getName();
+            this.channelId = youtuber.getChannelId();
+        }
+    }
 }

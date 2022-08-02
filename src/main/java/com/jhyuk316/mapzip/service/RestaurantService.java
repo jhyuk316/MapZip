@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,7 +74,6 @@ public class RestaurantService {
 
     private boolean isValidRestaurant(RestaurantDTO restaurantDTO) {
         if (!StringUtils.hasText(restaurantDTO.getName())) {
-            System.out.println("식당 이름이 비었음.");
             log.info("식당 이름이 비었음.");
             return false;
         }
@@ -145,6 +145,10 @@ public class RestaurantService {
 
     @Transactional
     public void addCategory(Long restaurantId, String category) {
+        if (!StringUtils.hasText(category)) {
+            throw new IllegalArgumentException("카테고리가 비었어요.");
+        }
+
         Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
         if (optionalRestaurant.isEmpty()) {
             throw new IllegalArgumentException("잘못된 식당 정보입니다.");
@@ -187,24 +191,30 @@ public class RestaurantService {
     }
 
     public void addYoutuber(Long restaurantId, Long youtuberId, String videoId) {
-        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findById(restaurantId);
-        if (optionalRestaurant.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 식당_ID");
-        }
-        Optional<YoutuberEntity> optionalYoutuber = youtuberRepository.findById(youtuberId);
-        if (optionalYoutuber.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 유튜버_ID");
-        }
-
-        RestaurantEntity restaurant = optionalRestaurant.get();
-        YoutuberEntity youtuber = optionalYoutuber.get();
+        RestaurantEntity restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID"));
+        YoutuberEntity youtuber = youtuberRepository.findById(youtuberId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 유튜버_ID"));
 
         RestaurantYoutuberEntity restaurantYoutuber = new RestaurantYoutuberEntity(restaurant, youtuber, videoId);
 
         restaurant.addRestaurantYoutuber(restaurantYoutuber);
         youtuber.addRestaurantYoutuber(restaurantYoutuber);
-        
+
         restaurantYoutuberRepository.save(restaurantYoutuber);
     }
 
+    public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long id) {
+        List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS = new ArrayList<>();
+        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithYoutuber(id);
+
+        if (optionalRestaurant.isPresent()) {
+            RestaurantEntity restaurant = optionalRestaurant.get();
+            for (RestaurantYoutuberEntity restaurantYoutuber : restaurant.getRestaurantYoutubers()) {
+                youtuberDTOS.add(new RestaurantDTO.InnerYoutuberDTO(restaurantYoutuber.getYoutuber()));
+            }
+        }
+
+        return youtuberDTOS;
+    }
 }

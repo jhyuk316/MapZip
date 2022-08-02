@@ -257,4 +257,38 @@ class RestaurantServiceTest {
         assertThat(restaurantYoutuber.getYoutuber().getId()).isEqualTo(youtuber.getId());
         assertThat(restaurantYoutuber.getVideoId()).isEqualTo(videoId);
     }
+
+    @Test
+    @DisplayName("유튜버 리스트 가져오기")
+    void getYoutubers() {
+        // given
+        YoutuberEntity youtuber1 = YoutuberEntity.builder()
+                .name("유튜버A")
+                .channelId("ChaA")
+                .build();
+        youtuberRepository.save(youtuber1);
+
+        YoutuberEntity youtuber2 = YoutuberEntity.builder()
+                .name("유튜버B")
+                .channelId("ChaB")
+                .build();
+        youtuberRepository.save(youtuber2);
+
+        RestaurantEntity restaurant = RestaurantEntity.builder()
+                .name("식당1")
+                .address("서울특별시 관악구 봉천동 962-1")
+                .build();
+        restaurantRepository.save(restaurant);
+
+        restaurantService.addYoutuber(restaurant.getId(), youtuber1.getId(), "VideoA");
+        restaurantService.addYoutuber(restaurant.getId(), youtuber2.getId(), "VideoB");
+
+        // when
+        List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(restaurant.getId());
+
+        // then
+        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO1 = new RestaurantDTO.InnerYoutuberDTO(youtuber1);
+        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO2 = new RestaurantDTO.InnerYoutuberDTO(youtuber2);
+        assertThat(youtubers).contains(innerYoutuberDTO1, innerYoutuberDTO2);
+    }
 }

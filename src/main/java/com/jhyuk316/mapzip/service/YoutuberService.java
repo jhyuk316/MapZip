@@ -45,12 +45,9 @@ public class YoutuberService {
     }
 
     public YoutuberDTO getYoutuberWithRestaurant(Long id) {
-        Optional<YoutuberEntity> optionalYoutuber = youtuberRepository.findByIdWithRestaurant(id);
-        if (optionalYoutuber.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 유튜버_ID에요.");
-        }
+        YoutuberEntity youtuber = youtuberRepository.findByIdWithRestaurant(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 유튜버_ID에요."));
 
-        YoutuberEntity youtuber = optionalYoutuber.get();
         YoutuberDTO youtuberDTO = new YoutuberDTO(youtuber);
         for (RestaurantYoutuberEntity restaurantYoutuber : youtuber.getRestaurantYoutubers()) {
             RestaurantEntity restaurant = restaurantYoutuber.getRestaurant();
