@@ -25,8 +25,10 @@ class CategoryServiceTest {
     private CategoryService categoryService;
 
     @Test
+    @Disabled
     void getCategory() {
         // given
+        // todo given 추가
 
         // when
         String categoryName = "한식";
