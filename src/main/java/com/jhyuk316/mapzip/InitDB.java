@@ -20,9 +20,12 @@ public class InitDB {
         insertYoutuber("유튜버A", "ChanA");
         insertYoutuber("유튜버B", "ChanB");
         insertYoutuber("유튜버C", "ChanC");
+        insertRestaurat1();
+        insertRestaurat2();
+        insertRestaurat3();
     }
 
-    @PostConstruct
+    // @PostConstruct
     private void insertRestaurat1() {
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당1")
@@ -39,7 +42,7 @@ public class InitDB {
         restaurantService.addYoutuber(savedId, 2L, "VideoB1");
     }
 
-    @PostConstruct
+    // @PostConstruct
     private void insertRestaurat2() {
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당2")
@@ -55,7 +58,7 @@ public class InitDB {
     }
 
 
-    @PostConstruct
+    // @PostConstruct
     private void insertRestaurat3() {
         RestaurantDTO restaurantDTO = RestaurantDTO.builder()
                 .name("시험식당3")
