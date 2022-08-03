@@ -22,9 +22,9 @@ public class RestaurantDTO {
     private String address;
     private float rating;
 
-    private List<String> categories = new ArrayList<>();
+    private final List<String> categories = new ArrayList<>();
 
-    private List<InnerYoutuberDTO> youtubers = new ArrayList<>();
+    private final List<InnerYoutuberDTO> youtubers = new ArrayList<>();
 
     public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();

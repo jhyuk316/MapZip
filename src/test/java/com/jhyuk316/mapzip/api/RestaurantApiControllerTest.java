@@ -39,6 +39,7 @@ class RestaurantApiControllerTest {
     private WebTestClient webTestClient;
 
 
+    @Disabled
     @Test
     void getRestaurants() throws Exception {
         // given
@@ -62,6 +63,7 @@ class RestaurantApiControllerTest {
 
     }
 
+    @Disabled
     @Test
     void addRestaurants() {
         // given
@@ -77,6 +79,7 @@ class RestaurantApiControllerTest {
 
     }
 
+    @Disabled
     @Test
     void testGetRestaurants() {
     }
