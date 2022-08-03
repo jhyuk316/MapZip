@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Disabled
 class RestaurantApiControllerTest {
 
     @Autowired
@@ -39,7 +40,6 @@ class RestaurantApiControllerTest {
     private WebTestClient webTestClient;
 
 
-    @Disabled
     @Test
     void getRestaurants() throws Exception {
         // given
@@ -63,7 +63,6 @@ class RestaurantApiControllerTest {
 
     }
 
-    @Disabled
     @Test
     void addRestaurants() {
         // given
@@ -79,7 +78,6 @@ class RestaurantApiControllerTest {
 
     }
 
-    @Disabled
     @Test
     void testGetRestaurants() {
     }
