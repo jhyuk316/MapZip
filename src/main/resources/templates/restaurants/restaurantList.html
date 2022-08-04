@@ -19,8 +19,14 @@
             <tr th:each="restaurant : ${restaurants}">
                 <td th:text="${restaurant.id}"></td>
                 <td th:text="${restaurant.name}"></td>
-                <td th:text="${restaurant.address}"></td>
-                <td th:text="|${restaurant.latitude}, ${restaurant.longitude}|"></td>
+                <td>
+                    <a th:href="@{|https://map.naver.com/?query=${restaurant.address}|}"
+                       th:text="${restaurant.address}"></a>
+                </td>
+                <td th:text="|${restaurant.latitude}, ${restaurant.longitude}|">
+                    <a th:href="@{|http://map.naver.com/index.nhn?lng=${restaurant.longitude}&lat=${restaurant.latitude}|}"
+                       th:text="|${restaurant.latitude}, ${restaurant.longitude}|"></a>
+                </td>
                 <!--                <td>-->
                 <!--                    <a href="#" th:href="@{|/items/${item.id}/edit|}"-->
                 <!--                       class="btn btn-primary" role="button">수정1</a>-->
