@@ -17,7 +17,7 @@ public class RestaurantDTO {
     @NotNull(message = "식당 이름은 필수에요.")
     private String name;
     private double latitude;
-    private double longtitude;
+    private double longitude;
     @NotNull(message = "식당 주소는 필수에요.")
     private String address;
     private float rating;
@@ -30,7 +30,7 @@ public class RestaurantDTO {
         id = entity.getId();
         name = entity.getName();
         latitude = entity.getLatitude();
-        longtitude = entity.getLongitude();
+        longitude = entity.getLongitude();
         address = entity.getAddress();
         rating = entity.getRating();
     }
@@ -40,7 +40,7 @@ public class RestaurantDTO {
                 .id(id)
                 .name(name)
                 .latitude(latitude)
-                .longitude(longtitude)
+                .longitude(longitude)
                 .address(address)
                 .rating(rating)
                 .build();

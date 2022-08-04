@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jhyuk316.mapzip.ApiKey;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
-import com.jhyuk316.mapzip.dto.YoutuberDTO;
 import com.jhyuk316.mapzip.model.*;
 import com.jhyuk316.mapzip.persistence.*;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -81,7 +79,7 @@ public class RestaurantService {
         }
         if (!StringUtils.hasText(restaurantDTO.getAddress())
                 && restaurantDTO.getLatitude() == 0
-                && restaurantDTO.getLongtitude() == 0) {
+                && restaurantDTO.getLongitude() == 0) {
             log.info("식당 주소나 좌표가 비었음");
             return false;
         }
