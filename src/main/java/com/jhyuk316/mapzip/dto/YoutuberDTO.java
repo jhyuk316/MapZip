@@ -38,7 +38,7 @@ public class YoutuberDTO {
                 .build();
     }
 
-    @EqualsAndHashCode
+    @Data
     static public class InnerRestaurantDTO {
         private final long id;
         private final String name;
@@ -51,7 +51,7 @@ public class YoutuberDTO {
             this.id = restaurant.getId();
             this.name = restaurant.getName();
             this.latitude = restaurant.getLatitude();
-            this.longtitude = restaurant.getLatitude();
+            this.longtitude = restaurant.getLongitude();
             this.address = restaurant.getAddress();
             this.rating = restaurant.getRating();
         }

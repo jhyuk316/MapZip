@@ -44,6 +44,11 @@ public class YoutuberService {
         return youtuberRepository.findByChannelId(youtuber.getChannelId()).isPresent();
     }
 
+    public List<YoutuberDTO> getYoutubers() {
+        List<YoutuberEntity> youtubers = youtuberRepository.findAll();
+        return youtubers.stream().map(YoutuberDTO::new).toList();
+    }
+
     public YoutuberDTO getYoutuberWithRestaurant(Long id) {
         YoutuberEntity youtuber = youtuberRepository.findByIdWithRestaurant(id)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 유튜버_ID에요."));
