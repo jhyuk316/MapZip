@@ -14,11 +14,11 @@ import java.util.List;
 @Data
 public class RestaurantDTO {
     private long id;
-    @NotNull
+    @NotNull(message = "식당 이름은 필수에요.")
     private String name;
     private double latitude;
     private double longtitude;
-    @NotNull
+    @NotNull(message = "식당 주소는 필수에요.")
     private String address;
     private float rating;
 
@@ -46,7 +46,7 @@ public class RestaurantDTO {
                 .build();
     }
 
-    @EqualsAndHashCode
+    @Data
     public static class InnerYoutuberDTO {
         private final long id;
         private final String name;

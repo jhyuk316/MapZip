@@ -162,6 +162,7 @@ public class RestaurantService {
         }
         RestaurantEntity restaurant = optionalRestaurant.get();
 
+        // TODO 뭔가 이상함 개선 해야 할듯.
         CategoryEntity categoryEntity = categoryRepository.findByName(category).orElseGet(() -> new CategoryEntity(category));
         categoryRepository.save(categoryEntity);
 
@@ -194,10 +195,6 @@ public class RestaurantService {
         return new RestaurantDTO(entity);
     }
 
-
-    public List<RestaurantDTO> getRestaurantByCoordination(double latitude, double longitude) {
-        return getRestaurantByCoordination(latitude, longitude, 3);
-    }
 
     public List<RestaurantDTO> getRestaurantByCoordination(double latitude, double longitude, double level) {
         double diff = 0.0001 * Math.pow(10, level);

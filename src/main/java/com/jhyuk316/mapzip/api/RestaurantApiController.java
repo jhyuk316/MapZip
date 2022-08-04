@@ -38,12 +38,13 @@ public class RestaurantApiController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    @GetMapping(value = "/restaurants", params = {"latitude", "longitude"})
+    @GetMapping(value = "/restaurants", params = {"latitude", "longitude", "level"})
     public ResponseEntity<ResponseDTO<RestaurantDTO>> getRestaurantsByCoordination(
             @RequestParam(required = true) double latitude,
-            @RequestParam(required = true) double longitude) {
+            @RequestParam(required = true) double longitude,
+            @RequestParam(required = false, defaultValue = "3") int level) {
 
-        List<RestaurantDTO> restaurantDTOS = restaurantService.getRestaurantByCoordination(latitude, longitude);
+        List<RestaurantDTO> restaurantDTOS = restaurantService.getRestaurantByCoordination(latitude, longitude, level);
 
         ResponseDTO<RestaurantDTO> responseDTO = ResponseDTO.<RestaurantDTO>builder()
                 .result(restaurantDTOS)
