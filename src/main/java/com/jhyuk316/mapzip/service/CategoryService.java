@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -17,6 +18,11 @@ import java.util.Optional;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+
+    public List<CategoryDTO> getCategories() {
+        List<CategoryEntity> categories = categoryRepository.findAll();
+        return categories.stream().map(CategoryDTO::new).toList();
+    }
 
     public CategoryDTO getCategory(String name) {
         Optional<CategoryEntity> optionalCategory = categoryRepository.findByName(name);
@@ -28,12 +34,9 @@ public class CategoryService {
         return new CategoryDTO(category);
     }
 
-    public CategoryDTO getRestaurants(Long id) {
-        Optional<CategoryEntity> optionalCategory = categoryRepository.findByIdWithRestaurants(id);
-        if (optionalCategory.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 카테고리");
-        }
-        CategoryEntity category = optionalCategory.get();
+    public CategoryDTO getRestaurants(Long categoryId) {
+        CategoryEntity category = categoryRepository.findByIdWithRestaurants(categoryId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 카테고리_ID"));
 
         CategoryDTO categoryDTO = new CategoryDTO(category);
         for (RestaurantCategoryEntity rc : category.getRestaurantCategories()) {
@@ -46,7 +49,7 @@ public class CategoryService {
     public CategoryDTO getRestaurants(String categoryName) {
         Optional<CategoryEntity> optionalCategory = categoryRepository.findByNameWithRestaurants(categoryName);
         if (optionalCategory.isEmpty()) {
-            throw new IllegalArgumentException("잘못된 카테고리");
+            throw new IllegalArgumentException("없는 카테고리에요.");
         }
         CategoryEntity category = optionalCategory.get();
 
@@ -56,5 +59,11 @@ public class CategoryService {
         }
 
         return categoryDTO;
+    }
+
+    public Long save(String categoryName) {
+        CategoryEntity category = new CategoryEntity(categoryName);
+        categoryRepository.save(category);
+        return category.getId();
     }
 }
