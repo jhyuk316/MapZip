@@ -49,7 +49,7 @@ public class YoutuberController {
     public String detail(@PathVariable("id") Long id, Model model) {
         YoutuberDTO youtuberDTO = youtuberService.getYoutuberWithRestaurant(id);
         model.addAttribute("youtuber", youtuberDTO);
-        return "/youtubers/youtuberDetail";
+        return "youtubers/youtuberDetail";
     }
 
 
