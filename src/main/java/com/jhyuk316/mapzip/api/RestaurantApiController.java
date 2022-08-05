@@ -6,6 +6,7 @@ import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.persistence.RestaurantRepository;
 import com.jhyuk316.mapzip.service.RestaurantService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bytecode.Throw;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,9 +99,37 @@ public class RestaurantApiController {
     }
 
     @PostMapping("restaurants/{id}/categories")
-    public ResponseEntity<Long> setCategory(@PathVariable("id") Long id, String category) {
+    public ResponseEntity<Long> addCategory(@PathVariable("id") Long id, @RequestBody String category) {
         Long savedId = restaurantService.addCategory(id, category);
         return ResponseEntity.ok().body(savedId);
+    }
+
+    @GetMapping("restaurants/{id}/youtubers")
+    public ResponseEntity<ResponseDTO<RestaurantDTO.InnerYoutuberDTO>> getYoutubers(@PathVariable("id") Long id) {
+        RestaurantEntity restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID에요"));
+
+        List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(id);
+
+        ResponseDTO<RestaurantDTO.InnerYoutuberDTO> responseDTO = ResponseDTO.<RestaurantDTO.InnerYoutuberDTO>builder()
+                .result(youtubers)
+                .build();
+
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @PostMapping("restaurants/{id}/youtubers")
+    public ResponseEntity<Long> addYoutuber(@PathVariable("id") Long restaurantId, @RequestBody YoutuberRequest youtuberRequest) {
+        Long savedId = restaurantService.addYoutuber(restaurantId, youtuberRequest.getId(), youtuberRequest.getVideoID());
+        return ResponseEntity.ok().body(savedId);
+    }
+
+    @Data
+    static class YoutuberRequest {
+        @NotEmpty(message = "유튜버_ID는 필수에요.")
+        private Long id;
+        @NotEmpty(message = "비디오_ID는 필수에요.")
+        private String videoID;
     }
 
 

@@ -210,7 +210,7 @@ public class RestaurantService {
         return restaurants.stream().map(RestaurantDTO::new).toList();
     }
 
-    public void addYoutuber(Long restaurantId, Long youtuberId, String videoId) {
+    public Long addYoutuber(Long restaurantId, Long youtuberId, String videoId) {
         RestaurantEntity restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID"));
         YoutuberEntity youtuber = youtuberRepository.findById(youtuberId)
@@ -222,6 +222,8 @@ public class RestaurantService {
         youtuber.addRestaurantYoutuber(restaurantYoutuber);
 
         restaurantYoutuberRepository.save(restaurantYoutuber);
+
+        return restaurantId;
     }
 
     public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long restaurantId) {
