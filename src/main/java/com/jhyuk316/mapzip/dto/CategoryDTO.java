@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 public class CategoryDTO {
     private Long id;
+    @NotEmpty(message = "카테고리 이름은 필수에요.")
     private String name;
     private final List<String> restaurants = new ArrayList<>();
 

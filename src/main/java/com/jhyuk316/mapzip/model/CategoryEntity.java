@@ -2,7 +2,9 @@ package com.jhyuk316.mapzip.model;
 
 import javax.persistence.*;
 
+import com.jhyuk316.mapzip.dto.CategoryDTO;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,10 @@ public class CategoryEntity {
 
     public CategoryEntity(String name) {
         this.name = name;
+    }
+
+    public CategoryEntity(CategoryDTO categoryDTO) {
+        this.name = categoryDTO.getName();
     }
 
     public void addRestaurantCategory(RestaurantCategoryEntity restaurantCategory) {
