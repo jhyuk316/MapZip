@@ -96,5 +96,11 @@ public class RestaurantApiController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+    @PostMapping("restaurants/{id}/categories")
+    public ResponseEntity<Long> setCategory(@PathVariable("id") Long id, String category) {
+        Long savedId = restaurantService.addCategory(id, category);
+        return ResponseEntity.ok().body(savedId);
+    }
+
 
 }
