@@ -1,5 +1,6 @@
 package com.jhyuk316.mapzip.api;
 
+import com.jhyuk316.mapzip.dto.CategoryDTO;
 import com.jhyuk316.mapzip.dto.ResponseDTO;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
@@ -70,11 +71,26 @@ public class RestaurantApiController {
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID에요"));
 
         RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant);
-
-        // List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(id);
+        List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(id);
+        List<CategoryDTO> categories = restaurantService.getCategories(id);
+        restaurantDTO.setYoutubers(youtubers);
+        restaurantDTO.setCategories(categories.stream().map(CategoryDTO::getName).toList());
 
         ResponseDTO<RestaurantDTO> responseDTO = ResponseDTO.<RestaurantDTO>builder()
                 .result(List.of(restaurantDTO))
+                .build();
+        return ResponseEntity.ok().body(responseDTO);
+    }
+
+    @GetMapping("restaurants/{id}/categories")
+    public ResponseEntity<ResponseDTO<CategoryDTO>> getCategories(@PathVariable("id") Long id) {
+        RestaurantEntity restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID에요"));
+
+        List<CategoryDTO> categories = restaurantService.getCategories(id);
+
+        ResponseDTO<CategoryDTO> responseDTO = ResponseDTO.<CategoryDTO>builder()
+                .result(categories)
                 .build();
 
         return ResponseEntity.ok().body(responseDTO);

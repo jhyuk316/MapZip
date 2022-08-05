@@ -22,9 +22,9 @@ public class RestaurantDTO {
     private String address;
     private float rating;
 
-    private final List<String> categories = new ArrayList<>();
+    private List<String> categories;
 
-    private final List<InnerYoutuberDTO> youtubers = new ArrayList<>();
+    private List<InnerYoutuberDTO> youtubers;
 
     public RestaurantDTO(final RestaurantEntity entity) {
         id = entity.getId();
@@ -52,10 +52,13 @@ public class RestaurantDTO {
         private final String name;
         private final String channelId;
 
-        public InnerYoutuberDTO(YoutuberEntity youtuber) {
+        private String videoId;
+
+        public InnerYoutuberDTO(YoutuberEntity youtuber, String videoId) {
             this.id = youtuber.getId();
             this.name = youtuber.getName();
             this.channelId = youtuber.getChannelId();
+            this.videoId = videoId;
         }
     }
 }

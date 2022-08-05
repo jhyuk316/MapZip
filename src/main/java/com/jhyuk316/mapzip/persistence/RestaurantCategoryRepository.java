@@ -2,6 +2,7 @@ package com.jhyuk316.mapzip.persistence;
 
 import com.jhyuk316.mapzip.model.CategoryEntity;
 import com.jhyuk316.mapzip.model.RestaurantEntity;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -15,6 +16,5 @@ public interface RestaurantCategoryRepository
         extends JpaRepository<RestaurantCategoryEntity, Long> {
 
     Optional<RestaurantCategoryEntity> findByRestaurantAndCategory(RestaurantEntity restaurant, CategoryEntity category);
-    
 
 }

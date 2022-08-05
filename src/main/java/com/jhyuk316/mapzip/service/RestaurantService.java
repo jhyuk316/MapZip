@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.jhyuk316.mapzip.ApiKey;
+import com.jhyuk316.mapzip.dto.CategoryDTO;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.model.*;
 import com.jhyuk316.mapzip.persistence.*;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -176,16 +178,13 @@ public class RestaurantService {
         categoryEntity.addRestaurantCategory(restaurantCategoryEntity);
     }
 
-    public RestaurantDTO getCategories(Long restaurantId) {
+    public List<CategoryDTO> getCategories(Long restaurantId) {
         RestaurantEntity restaurant = restaurantRepository.findByIdWithCategory(restaurantId)
                 .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID"));
 
-        RestaurantDTO restaurantDTO = new RestaurantDTO(restaurant);
-        for (RestaurantCategoryEntity entity : restaurant.getRestaurantCategories()) {
-            restaurantDTO.getCategories().add(entity.getCategory().getName());
-        }
-
-        return restaurantDTO;
+        return restaurant.getRestaurantCategories().stream()
+                .map(entity -> new CategoryDTO(entity.getCategory()))
+                .toList();
     }
 
     public RestaurantDTO getRestaurant(long id) {
@@ -195,7 +194,11 @@ public class RestaurantService {
 
 
     public List<RestaurantDTO> getRestaurantByCoordination(double latitude, double longitude, double level) {
-        double diff = 0.0001 * Math.pow(10, level);
+        // 위도 35도 부근 위경도 거리
+        // latitude 위도 1도 = 110.941km
+        // longitude 경도 1도 = 91.290km
+        // Todo 좀더 좋은 범위가 필요.
+        double diff = 0.0001 * Math.pow(10, level); // 1: 10m 2: 100m 3: 1000m 대략적 범위.
 
         List<RestaurantEntity> restaurants = restaurantRepository.findByLatitudeBetweenAndLongitudeBetween(latitude - diff, latitude + diff, longitude - diff, longitude + diff);
         restaurants.sort(Comparator.comparingDouble(
@@ -220,15 +223,13 @@ public class RestaurantService {
     }
 
     public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long restaurantId) {
-        List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS = new ArrayList<>();
-        Optional<RestaurantEntity> optionalRestaurant = restaurantRepository.findByIdWithYoutuber(restaurantId);
+        List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS;
+        RestaurantEntity restaurant = restaurantRepository.findByIdWithYoutuber(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("잘몬된 식당_ID"));
 
-        if (optionalRestaurant.isPresent()) {
-            RestaurantEntity restaurant = optionalRestaurant.get();
-            for (RestaurantYoutuberEntity restaurantYoutuber : restaurant.getRestaurantYoutubers()) {
-                youtuberDTOS.add(new RestaurantDTO.InnerYoutuberDTO(restaurantYoutuber.getYoutuber()));
-            }
-        }
+        youtuberDTOS = restaurant.getRestaurantYoutubers().stream()
+                .map(restaurantYoutuber -> new RestaurantDTO.InnerYoutuberDTO(restaurantYoutuber.getYoutuber(), restaurantYoutuber.getVideoId()))
+                .collect(Collectors.toList());
 
         return youtuberDTOS;
     }

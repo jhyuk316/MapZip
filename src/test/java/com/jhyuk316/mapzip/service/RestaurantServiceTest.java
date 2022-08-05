@@ -1,5 +1,6 @@
 package com.jhyuk316.mapzip.service;
 
+import com.jhyuk316.mapzip.dto.CategoryDTO;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
 import com.jhyuk316.mapzip.dto.YoutuberDTO;
 import com.jhyuk316.mapzip.model.*;
@@ -15,6 +16,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
@@ -143,12 +145,15 @@ class RestaurantServiceTest {
         restaurantService.addCategory(savedId, tag3);
 
         // when
-        RestaurantDTO result = restaurantService.getCategories(savedId);
+        List<CategoryDTO> categories = restaurantService.getCategories(savedId);
 
         // then
-        assertThat(result.getName()).isEqualTo(restaurant.getName());
-        assertThat(result.getAddress()).isEqualTo(restaurant.getAddress());
-        assertThat(result.getCategories()).contains(tag1, tag2, tag3);
+        // assertThat(result.getName()).isEqualTo(restaurant.getName());
+        // assertThat(result.getAddress()).isEqualTo(restaurant.getAddress());
+        CategoryEntity category1 = categoryRepository.findByName(tag1).get();
+        CategoryEntity category2 = categoryRepository.findByName(tag1).get();
+        CategoryEntity category3 = categoryRepository.findByName(tag1).get();
+        assertThat(categories).contains(new CategoryDTO(category1), new CategoryDTO(category2), new CategoryDTO(category3));
     }
 
     @Test
@@ -296,8 +301,8 @@ class RestaurantServiceTest {
         List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(restaurant.getId());
 
         // then
-        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO1 = new RestaurantDTO.InnerYoutuberDTO(youtuber1);
-        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO2 = new RestaurantDTO.InnerYoutuberDTO(youtuber2);
+        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO1 = new RestaurantDTO.InnerYoutuberDTO(youtuber1, "VideoA");
+        RestaurantDTO.InnerYoutuberDTO innerYoutuberDTO2 = new RestaurantDTO.InnerYoutuberDTO(youtuber2, "VideoB");
         assertThat(youtubers).contains(innerYoutuberDTO1, innerYoutuberDTO2);
     }
 }
