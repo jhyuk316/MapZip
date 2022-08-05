@@ -19,7 +19,7 @@
             <tr th:each="restaurant : ${restaurants}">
                 <td th:text="${restaurant.id}"></td>
                 <td>
-                    <a th:href="@{|/restaurants/${restaurant.id}/detail|}"
+                    <a th:href="@{|/restaurants/${restaurant.id}|}"
                        th:text="${restaurant.name}"></a>
                 </td>
                 <td>
@@ -27,8 +27,8 @@
                        th:text="${restaurant.address}" target="_blank"></a>
                 </td>
                 <td th:text="|${restaurant.latitude}, ${restaurant.longitude}|">
-                    <a th:href="@{|http://map.naver.com/index.nhn?lng=${restaurant.longitude}&lat=${restaurant.latitude}|}"
-                       th:text="|${restaurant.latitude}, ${restaurant.longitude}|" target="_blank"></a>
+                    <!--                    <a th:href="@{|http://map.naver.com/index.nhn?lng=${restaurant.longitude}&lat=${restaurant.latitude}|}"-->
+                    <!--                       th:text="|${restaurant.latitude}, ${restaurant.longitude}|" target="_blank"></a>-->
                 </td>
                 <!--                <td>-->
                 <!--                    <a href="#" th:href="@{|/items/${item.id}/edit|}"-->

@@ -46,7 +46,7 @@ public class RestaurantController {
         return "redirect:/";
     }
 
-    @GetMapping("/restaurants/{id}/detail")
+    @GetMapping("/restaurants/{id}")
     public String detail(Model model, @PathVariable("id") Long id) {
         RestaurantDTO restaurantDTO = restaurantService.getRestaurant(id);
         List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(id);

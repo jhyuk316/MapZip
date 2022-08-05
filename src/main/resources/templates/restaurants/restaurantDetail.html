@@ -37,11 +37,13 @@
                 <td th:text="${youtuber.name}"></td>
                 <td>
                     <a th:href="@{|https://www.youtube.com/channel/${youtuber.channelId}|}"
-                       th:text="|https://www.youtube.com/channel/${youtuber.channelId}|"></a>
+                       th:text="|https://www.youtube.com/channel/${youtuber.channelId}|"
+                       target="_blank"></a>
                 </td>
                 <td>
                     <a th:href="@{|https://www.youtube.com/watch?v=${youtuber.videoId}|}"
-                       th:text="|https://www.youtube.com/watch?v=${youtuber.videoId}|"></a>
+                       th:text="|https://www.youtube.com/watch?v=${youtuber.videoId}|"
+                       target="_blank"></a>
                 </td>
             </tr>
             </tbody>
