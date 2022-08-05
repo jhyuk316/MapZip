@@ -62,8 +62,26 @@ public class CategoryService {
     }
 
     public Long save(String categoryName) {
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findByName(categoryName);
+
         CategoryEntity category = new CategoryEntity(categoryName);
-        categoryRepository.save(category);
+        if (optionalCategory.isPresent()) {
+            category = optionalCategory.get();
+        } else {
+            categoryRepository.save(category);
+        }
         return category.getId();
+    }
+
+    public Long save(CategoryDTO categoryDTO) {
+        Optional<CategoryEntity> optionalCategory = categoryRepository.findByName(categoryDTO.getName());
+
+        if (optionalCategory.isPresent()) {
+            return optionalCategory.get().getId();
+        } else {
+            CategoryEntity category = new CategoryEntity(categoryDTO);
+            categoryRepository.save(category);
+            return category.getId();
+        }
     }
 }
