@@ -15,21 +15,21 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.OAS_30)
-            .enableUrlTemplating(false)
-            .apiInfo(apiInfo())
-            .useDefaultResponseMessages(true)
-            .select()
-            .apis(RequestHandlerSelectors.basePackage("com.jhyuk316.mapzip.controller"))
-            .paths(PathSelectors.any())
-            .build();
+                .enableUrlTemplating(false)
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(true)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.jhyuk316.mapzip.api"))
+                .paths(PathSelectors.any())
+                .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Mapzip API")
-            .description("맵집 API")
-            .version("0.0.1")
-            .build();
+                .title("MapZip API")
+                .description("맵집 API")
+                .version("0.0.1")
+                .build();
     }
 
 }
