@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.NotFound;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,9 @@ import java.util.Objects;
 @Data
 public class YoutuberDTO {
     private long id;
-    @NotNull(message = "유튜브 채널이름은 필수에요")
+    @NotEmpty(message = "유튜브 채널이름은 필수에요")
     private String name;
-    @NotNull(message = "유튜브 채널ID는 필수에요.")
+    @NotEmpty(message = "유튜브 채널ID는 필수에요.")
     private String channelId;
 
     private final List<InnerRestaurantDTO> restaurants = new ArrayList<>();

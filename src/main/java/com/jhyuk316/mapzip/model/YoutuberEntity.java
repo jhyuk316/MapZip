@@ -1,6 +1,7 @@
 package com.jhyuk316.mapzip.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.*;
@@ -18,9 +19,9 @@ public class YoutuberEntity {
     @Column(name = "youtuber_id")
     private long id;
 
-    @NotNull(message = "유튜버 채널명 누락")
+    @NotEmpty(message = "유튜버 채널명 누락")
     private String name;
-    @NotNull(message = "유튜버 채널ID 누락")
+    @NotEmpty(message = "유튜버 채널ID 누락")
     private String channelId;
 
     @OneToMany(mappedBy = "youtuber")
