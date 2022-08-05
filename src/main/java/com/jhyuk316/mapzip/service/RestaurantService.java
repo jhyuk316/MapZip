@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 
@@ -151,7 +152,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public void addCategory(Long restaurantId, String category) {
+    public Long addCategory(Long restaurantId, String category) {
         if (!StringUtils.hasText(category)) {
             throw new IllegalArgumentException("카테고리가 비었어요.");
         }
@@ -176,11 +177,12 @@ public class RestaurantService {
         // 관계 설정
         restaurant.addRestaurantCategory(restaurantCategoryEntity);
         categoryEntity.addRestaurantCategory(restaurantCategoryEntity);
+        return restaurantId;
     }
 
     public List<CategoryDTO> getCategories(Long restaurantId) {
         RestaurantEntity restaurant = restaurantRepository.findByIdWithCategory(restaurantId)
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 식당_ID"));
+                .orElseGet(() -> restaurantRepository.getById(restaurantId));
 
         return restaurant.getRestaurantCategories().stream()
                 .map(entity -> new CategoryDTO(entity.getCategory()))
@@ -225,7 +227,7 @@ public class RestaurantService {
     public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long restaurantId) {
         List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS;
         RestaurantEntity restaurant = restaurantRepository.findByIdWithYoutuber(restaurantId)
-                .orElseThrow(() -> new IllegalArgumentException("잘몬된 식당_ID"));
+                .orElseGet(() -> restaurantRepository.getById(restaurantId));
 
         youtuberDTOS = restaurant.getRestaurantYoutubers().stream()
                 .map(restaurantYoutuber -> new RestaurantDTO.InnerYoutuberDTO(restaurantYoutuber.getYoutuber(), restaurantYoutuber.getVideoId()))

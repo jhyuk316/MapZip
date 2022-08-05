@@ -1,6 +1,8 @@
 package com.jhyuk316.mapzip.controller;
 
+import com.jhyuk316.mapzip.dto.CategoryDTO;
 import com.jhyuk316.mapzip.dto.RestaurantDTO;
+import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -41,6 +44,18 @@ public class RestaurantController {
 
         restaurantService.save(restaurantForm);
         return "redirect:/";
+    }
+
+    @GetMapping("/restaurants/{id}/detail")
+    public String detail(Model model, @PathVariable("id") Long id) {
+        RestaurantDTO restaurantDTO = restaurantService.getRestaurant(id);
+        List<RestaurantDTO.InnerYoutuberDTO> youtubers = restaurantService.getYoutubers(id);
+        List<CategoryDTO> categories = restaurantService.getCategories(id);
+        restaurantDTO.setYoutubers(youtubers);
+        restaurantDTO.setCategories(categories.stream().map(CategoryDTO::getName).toList());
+
+        model.addAttribute("restaurantDTO", restaurantDTO);
+        return "restaurants/restaurantDetail";
     }
 
 }

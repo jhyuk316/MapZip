@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div th:object="${restaurantDTO}">
+        <h2 th:text="${restaurantDTO.name}">식당 이름</h2>
+        <a th:text="${restaurantDTO.address}"
+           th:href="@{|https://map.naver.com/?query=${restaurantDTO.address}|}"
+           target="_blank">식당 주소</a>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>카테고리</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="category : ${restaurantDTO.categories}">
+                <td th:text="${category}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>유튜버</th>
+                <th>채널 주소</th>
+                <th>영상 주소</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="youtuber : ${restaurantDTO.youtubers}">
+                <td th:text="${youtuber.id}"></td>
+                <td th:text="${youtuber.name}"></td>
+                <td>
+                    <a th:href="@{|https://www.youtube.com/channel/${youtuber.channelId}|}"
+                       th:text="|https://www.youtube.com/channel/${youtuber.channelId}|"></a>
+                </td>
+                <td>
+                    <a th:href="@{|https://www.youtube.com/watch?v=${youtuber.videoId}|}"
+                       th:text="|https://www.youtube.com/watch?v=${youtuber.videoId}|"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>
