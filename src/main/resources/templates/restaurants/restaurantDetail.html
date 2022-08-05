@@ -29,12 +29,16 @@
                 <th>유튜버</th>
                 <th>채널 주소</th>
                 <th>영상 주소</th>
+                <th>영상 썸네일</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="youtuber : ${restaurantDTO.youtubers}">
                 <td th:text="${youtuber.id}"></td>
-                <td th:text="${youtuber.name}"></td>
+                <td>
+                    <a th:text="${youtuber.name}"
+                       th:href="@{|/youtubers/${youtuber.id}|}"></a>
+                </td>
                 <td>
                     <a th:href="@{|https://www.youtube.com/channel/${youtuber.channelId}|}"
                        th:text="|https://www.youtube.com/channel/${youtuber.channelId}|"
@@ -44,6 +48,10 @@
                     <a th:href="@{|https://www.youtube.com/watch?v=${youtuber.videoId}|}"
                        th:text="|https://www.youtube.com/watch?v=${youtuber.videoId}|"
                        target="_blank"></a>
+                </td>
+                <td>
+                    <img th:src="@{|https://img.youtube.com/vi/${youtuber.videoId}/0.jpg|}"
+                         th:alt="${youtuber.videoId}" target="_blank">
                 </td>
             </tr>
             </tbody>
