@@ -33,7 +33,7 @@ public class RestaurantController {
         return "restaurants/createRestaurantForm";
     }
 
-    @PostMapping("restaurants/new")
+    @PostMapping("/restaurants/new")
     public String create(@Valid @ModelAttribute("restaurantForm") RestaurantDTO restaurantForm, BindingResult result) {
         if (result.hasErrors()) {
             return "restaurants/createRestaurantForm";
