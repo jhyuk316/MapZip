@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -39,9 +40,17 @@ public class YoutuberController {
         if (result.hasErrors()) {
             return "youtubers/createYoutuberForm";
         }
-        
+
         youtuberService.save(youtuberDTO);
         return "redirect:/";
     }
+
+    @GetMapping("/youtubers/{id}")
+    public String detail(@PathVariable("id") Long id, Model model) {
+        YoutuberDTO youtuberDTO = youtuberService.getYoutuberWithRestaurant(id);
+        model.addAttribute("youtuber", youtuberDTO);
+        return "/youtubers/youtuberDetail";
+    }
+
 
 }

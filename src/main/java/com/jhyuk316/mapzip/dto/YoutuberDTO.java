@@ -48,6 +48,8 @@ public class YoutuberDTO {
         private final String address;
         private final float rating;
 
+        private String videoId;
+
         public InnerRestaurantDTO(RestaurantEntity restaurant) {
             this.id = restaurant.getId();
             this.name = restaurant.getName();

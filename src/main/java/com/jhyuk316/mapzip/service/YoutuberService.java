@@ -56,7 +56,9 @@ public class YoutuberService {
         YoutuberDTO youtuberDTO = new YoutuberDTO(youtuber);
         for (RestaurantYoutuberEntity restaurantYoutuber : youtuber.getRestaurantYoutubers()) {
             RestaurantEntity restaurant = restaurantYoutuber.getRestaurant();
-            youtuberDTO.getRestaurants().add(new YoutuberDTO.InnerRestaurantDTO(restaurant));
+            YoutuberDTO.InnerRestaurantDTO innerRestaurantDTO = new YoutuberDTO.InnerRestaurantDTO(restaurant);
+            innerRestaurantDTO.setVideoId(restaurantYoutuber.getVideoId());
+            youtuberDTO.getRestaurants().add(innerRestaurantDTO);
         }
 
         return youtuberDTO;

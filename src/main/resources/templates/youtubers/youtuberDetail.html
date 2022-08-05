@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"/>
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div>
+        <h2 th:text="${youtuber.name}">유튜버 이름</h2>
+        <a th:href="@{|https://www.youtube.com/channel/${youtuber.channelId}|}"
+           th:text="|https://www.youtube.com/channel/${youtuber.channelId}|">채널 주소</a>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>식당 이름</th>
+                <th>주소</th>
+                <th>영상 링크</th>
+                <th>영상 썸네일</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="restaurant : ${youtuber.restaurants}">
+                <td th:text="${restaurant.id}"></td>
+                <td th:text="${restaurant.name}"></td>
+                <td>
+                    <a th:href="@{|https://map.naver.com/?query=${restaurant.address}|}"
+                       th:text="${restaurant.address}" target="_blank"></a>
+                </td>
+                <td>
+                    <a th:href="@{|https://www.youtube.com/watch?v=${restaurant.videoId}|}"
+                       th:text="|https://www.youtube.com/watch?v=${restaurant.videoId}|"
+                       target="_blank"></a>
+                </td>
+                <td>
+                    <!--                    <img th:src="@{|https://img.youtube.com/vi/${restaurant.videoId}/maxresdefault.jpg|}"-->
+                    <img th:src="@{|https://img.youtube.com/vi/${restaurant.videoId}/0.jpg|}"
+                         th:alt="${restaurant.videoId}" target="_blank">
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div> <!-- /container -->
+</body>
+</html>

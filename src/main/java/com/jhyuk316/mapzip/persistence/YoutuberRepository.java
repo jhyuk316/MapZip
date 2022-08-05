@@ -21,8 +21,8 @@ public interface YoutuberRepository extends JpaRepository<YoutuberEntity, Long> 
 
     @Query("select y " +
             "from YoutuberEntity y " +
-            "join fetch y.restaurantYoutubers ry " +
-            "join fetch ry.restaurant r " +
+            "left join fetch y.restaurantYoutubers ry " +
+            "left join fetch ry.restaurant r " +
             "where y.id = :id")
     Optional<YoutuberEntity> findByIdWithRestaurant(@Param("id") Long id);
 

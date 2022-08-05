@@ -16,8 +16,11 @@
             </thead>
             <tbody>
             <tr th:each="youtuber : ${youtubers}">
-                <td th:text="${youtuber.id}"></td>
-                <td th:text="${youtuber.name}"></td>
+                <td th:text="${youtuber.id}">ID</td>
+                <td>
+                    <a th:text="${youtuber.name}"
+                       th:href="@{|/youtubers/${youtuber.id}|}"></a>
+                </td>
                 <td>
                     <a th:href="@{|https://www.youtube.com/channel/${youtuber.channelId}|}"
                        th:text="|https://www.youtube.com/channel/${youtuber.channelId}|"></a>
