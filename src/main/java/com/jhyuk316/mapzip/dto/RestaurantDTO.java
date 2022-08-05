@@ -4,7 +4,7 @@ import com.jhyuk316.mapzip.model.RestaurantEntity;
 import com.jhyuk316.mapzip.model.YoutuberEntity;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +14,11 @@ import java.util.List;
 @Data
 public class RestaurantDTO {
     private long id;
-    @NotNull(message = "식당 이름은 필수에요.")
+    @NotEmpty(message = "식당 이름은 필수에요.")
     private String name;
     private double latitude;
     private double longitude;
-    @NotNull(message = "식당 주소는 필수에요.")
+    @NotEmpty(message = "식당 주소는 필수에요.")
     private String address;
     private float rating;
 

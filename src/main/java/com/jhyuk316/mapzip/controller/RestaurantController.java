@@ -6,8 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -21,6 +25,22 @@ public class RestaurantController {
         List<RestaurantDTO> restaurantDTOS = restaurantService.getRestaurantByCoordination(37.4843, 126.9297, 3);
         model.addAttribute("restaurants", restaurantDTOS);
         return "restaurants/restaurantList";
+    }
+
+    @GetMapping("/restaurants/new")
+    public String createRestaurants(Model model) {
+        model.addAttribute("restaurantForm", new RestaurantDTO());
+        return "restaurants/createRestaurantForm";
+    }
+
+    @PostMapping("restaurants/new")
+    public String create(@Valid @ModelAttribute("restaurantForm") RestaurantDTO restaurantForm, BindingResult result) {
+        if (result.hasErrors()) {
+            return "restaurants/createRestaurantForm";
+        }
+
+        restaurantService.save(restaurantForm);
+        return "redirect:/";
     }
 
 }
