@@ -29,7 +29,7 @@ public class RestaurantApiController {
     private final RestaurantService restaurantService;
     private final RestaurantRepository restaurantRepository;
 
-    @GetMapping("/restaurants")
+    // @GetMapping("/restaurants")
     public ResponseEntity<ResponseDTO<RestaurantDTO>> getRestaurants() {
         List<RestaurantEntity> restaurants = restaurantRepository.findAll();
 
