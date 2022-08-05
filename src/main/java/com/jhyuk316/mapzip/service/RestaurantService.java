@@ -228,6 +228,7 @@ public class RestaurantService {
 
     public List<RestaurantDTO.InnerYoutuberDTO> getYoutubers(Long restaurantId) {
         List<RestaurantDTO.InnerYoutuberDTO> youtuberDTOS;
+        // TODO LEFT JOIN을 해볼까?
         RestaurantEntity restaurant = restaurantRepository.findByIdWithYoutuber(restaurantId)
                 .orElseGet(() -> restaurantRepository.getById(restaurantId));
 

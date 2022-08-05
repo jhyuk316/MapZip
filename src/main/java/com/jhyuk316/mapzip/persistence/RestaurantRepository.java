@@ -32,22 +32,22 @@ public interface RestaurantRepository extends JpaRepository<RestaurantEntity, Lo
 
     @Query("select r " +
             "from RestaurantEntity r " +
-            "join fetch r.restaurantCategories rc " +
-            "join fetch rc.category c " +
+            "left join fetch r.restaurantCategories rc " +
+            "left join fetch rc.category c " +
             "where r.id = :id")
     Optional<RestaurantEntity> findByIdWithCategory(@Param("id") Long id);
 
     @Query("select r " +
             "from RestaurantEntity r " +
-            "join fetch r.restaurantCategories rc " +
-            "join fetch rc.category c " +
+            "left join fetch r.restaurantCategories rc " +
+            "left join fetch rc.category c " +
             "where r.name = :name")
     Optional<RestaurantEntity> findByNameWithCategory(@Param("name") String name);
 
     @Query("select r " +
             "from RestaurantEntity r " +
-            "join fetch r.restaurantYoutubers ry " +
-            "join fetch ry.youtuber y " +
+            "left join fetch r.restaurantYoutubers ry " +
+            "left join fetch ry.youtuber y " +
             "where r.id = :id")
     Optional<RestaurantEntity> findByIdWithYoutuber(@Param("id") Long id);
 

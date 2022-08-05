@@ -134,8 +134,11 @@ class YoutuberServiceTest {
         assertThat(youtuberDTO.getRestaurants().size()).isEqualTo(3);
 
         YoutuberDTO.InnerRestaurantDTO innerRestaurantDTO1 = new YoutuberDTO.InnerRestaurantDTO(restaurant1);
+        innerRestaurantDTO1.setVideoId(videoId1);
         YoutuberDTO.InnerRestaurantDTO innerRestaurantDTO2 = new YoutuberDTO.InnerRestaurantDTO(restaurant2);
+        innerRestaurantDTO2.setVideoId(videoId2);
         YoutuberDTO.InnerRestaurantDTO innerRestaurantDTO3 = new YoutuberDTO.InnerRestaurantDTO(restaurant3);
+        innerRestaurantDTO3.setVideoId(videoId3);
         assertThat(youtuberDTO.getRestaurants()).contains(innerRestaurantDTO1, innerRestaurantDTO2, innerRestaurantDTO3);
     }
 }
